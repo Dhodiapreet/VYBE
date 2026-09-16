@@ -1,67 +1,104 @@
-# VYBE Backend
+<div align="center">
 
-**Tagline:** "One platform. Every vibe."
+# 🎬 VYBE
 
-VYBE is a unified social discovery platform combining Movies, Music, and Sports into a single personalized social ecosystem.
+### **One platform. Every vibe.**
 
-## Tech Stack
-- **Node.js & Express.js**: Fast, scalable API framework.
-- **MongoDB & Mongoose**: Flexible NoSQL database and ODM.
-- **JWT & bcryptjs**: Stateless, secure authentication.
-- **Zod**: Input schema validation.
+**A unified social discovery platform for Movies, Music & Sports**
 
-## Architecture
-This project uses a **Modular Monolith** architecture.
-- **Routes -> Controllers -> Services -> Models -> Database**
-- Thin controllers, fat services for business logic.
+*Discover. Rate. Review. Follow. Share your vibe.*
 
-## Folder Structure
-```
-/src
-  /config         # DB & Environment config
-  /middleware     # Global & route-specific middleware (Auth, Errors)
-  /utils          # Utilities, Error classes, Seed scripts
-  /modules        # Domain-driven feature modules
-    /auth
-    /users
-    /movies
-    /music
-    /sports
-    /reviews
-    /ratings
-    /collections
-    /social
-    /search
-```
+[![GitHub Repository](https://img.shields.io/badge/GitHub-Repository-181717?style=for-the-badge&logo=github)](https://github.com/Dhodiapreet/VYBE)
+[![Node.js](https://img.shields.io/badge/Node.js-20%2B-339933?style=for-the-badge&logo=node.js)](https://nodejs.org/)
+[![Express.js](https://img.shields.io/badge/Express.js-API-000000?style=for-the-badge&logo=express)](https://expressjs.com/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-Database-47A248?style=for-the-badge&logo=mongodb)](https://www.mongodb.com/)
+[![Mongoose](https://img.shields.io/badge/Mongoose-ODM-880000?style=for-the-badge)]
+[![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge&logo=jsonwebtokens)](https://jwt.io/)
+[![Status](https://img.shields.io/badge/Backend-MVP%20Verified-22C55E?style=for-the-badge)](#-current-project-status)
 
-## Setup Instructions
+</div>
 
-1. Clone the repository.
-2. Run `npm install`.
-3. Configure your `.env` file based on `.env.example`.
-4. Run the seed command to populate demo data: `npm run seed`.
-5. Start the server: `npm run dev` (development) or `npm start` (production).
+---
 
-## Environment Variables
-Create a `.env` file in the root directory:
-```
-PORT=5000
-NODE_ENV=development
-MONGODB_URI=mongodb://127.0.0.1:27017/vybe
-JWT_SECRET=supersecretvybekey2026
-JWT_EXPIRES_IN=7d
-```
+## 📖 About the Project
 
-## Available Scripts
-- `npm run dev`: Start in development mode (nodemon).
-- `npm start`: Start in production mode.
-- `npm run seed`: Clears local DB and inserts realistic demo data.
-- `npm test`: Runs the Jest test suite.
+**VYBE** is a unified social discovery platform designed to bring **Movies, Music, and Sports** together in one personalized ecosystem.
 
-## Testing & API Validation
-Use the included `npm test` script to validate basic functionality. For Postman, all endpoints are prefixed with `/api/v1/`. Send a `Bearer <token>` in the Authorization header for protected routes.
+Instead of using separate platforms to discover entertainment and sports content, VYBE provides a single place where users can:
 
-## Current Limitations
-- External API integration is mocked via seed data to ensure demo reliability.
-- Advanced Recommendation engine uses basic logic rather than complex Machine Learning.
-- WebSockets for real-time notifications are scheduled for a future phase.
+- 🎬 Discover Movies
+- 🎵 Discover Music
+- 🏏 Explore Sports
+- ⭐ Rate content
+- 📝 Write Reviews
+- ❤️ Save Favorites
+- 📌 Manage Watchlists
+- 📚 Create Collections
+- 👥 Follow other users
+- 🔔 Receive Notifications
+- 🤖 Get Personalized Recommendations
+- 🔎 Search across multiple content categories
+- 🛡️ Manage users through an Admin portal
+
+### 🎯 Core Idea
+
+> **One platform. Every vibe.**
+
+VYBE is designed around the idea that a user's entertainment and sports interests are connected.
+
+A user might:
+
+**Watch a movie → rate it → review it → discover its music → explore an artist → follow a sports team → create a collection containing all of them.**
+
+---
+
+# ✨ Highlights
+
+| Area | What is Included |
+| :--- | :--- |
+| 🎬 **Movies** | Movie discovery, details and seeded content |
+| 🎵 **Music** | Songs, artists and albums |
+| 🏏 **Sports** | Matches, teams and players |
+| ⭐ **Ratings** | User ratings with duplicate prevention |
+| 📝 **Reviews** | Create and retrieve user reviews |
+| 📚 **Collections** | Create and manage personal collections |
+| 📌 **Watchlist** | Save content for later |
+| 👥 **Social** | Follow users and social interactions |
+| 🔎 **Search** | Unified content search |
+| 🤖 **Recommendations** | Rule-based personalized recommendations |
+| 🎲 **Surprise Me** | Randomized discovery experience |
+| 🔔 **Notifications** | User notification system |
+| 🛡️ **Admin** | User management and role-based access |
+| 🔐 **Authentication** | JWT-based authentication |
+| 🔒 **Security** | Password hashing, validation, rate limiting & security middleware |
+| 🧪 **API Testing** | 30/30 verified API endpoint tests |
+| 🗄️ **Database** | MongoDB + Mongoose |
+| 🏗️ **Architecture** | Modular Monolith |
+
+---
+
+# 🏗️ System Architecture
+
+VYBE currently follows a **Modular Monolith** architecture.
+
+```mermaid
+flowchart TD
+
+    Client[🌐 React Frontend]
+    
+    Client --> API[⚡ Express REST API]
+
+    API --> Routes[🛣️ Routes]
+    Routes --> Middleware[🔐 Middleware]
+    Middleware --> Controllers[🎮 Controllers]
+    Controllers --> Services[⚙️ Services]
+    Services --> Models[📦 Mongoose Models]
+    Models --> DB[(🍃 MongoDB)]
+
+    Services --> Integrations[🔌 External API Integrations]
+
+    Services --> Auth[🔑 Authentication]
+    Services --> Social[👥 Social System]
+    Services --> Recommendation[🤖 Recommendation Engine]
+    Services --> Notification[🔔 Notification System]
+    Services --> Admin[🛡️ Admin System]
