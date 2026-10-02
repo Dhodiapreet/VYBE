@@ -1,0 +1,145 @@
+.user-profile-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.btn-follow-profile {
+  background: var(--accent);
+  color: #fff;
+  border: none;
+  padding: 10px 24px;
+  border-radius: 6px;
+  font-family: inherit;
+  font-size: 15px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+}
+
+.btn-follow-profile:hover {
+  background: #902be6;
+}
+
+.btn-follow-profile.following {
+  background: transparent;
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.btn-follow-profile.following:hover {
+  background: rgba(255, 255, 255, 0.05);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+.user-taste-summary {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-top: 8px;
+}
+
+.taste-tag-profile {
+  background: rgba(170, 59, 255, 0.15);
+  color: #d194ff;
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.clickable-stat {
+  cursor: pointer;
+  transition: opacity 0.2s;
+  padding: 4px;
+  border-radius: 4px;
+}
+
+.clickable-stat:hover {
+  opacity: 0.8;
+  background: rgba(255, 255, 255, 0.05);
+}
+
+.followers-list-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 8px;
+}
+
+.follower-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.follower-item:last-child {
+  border-bottom: none;
+}
+
+.follower-info {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  text-decoration: none;
+  color: inherit;
+}
+
+.follower-info:hover .follower-name {
+  color: var(--accent);
+}
+
+.follower-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.follower-details {
+  display: flex;
+  flex-direction: column;
+}
+
+.follower-name {
+  font-size: 15px;
+  font-weight: 600;
+  margin: 0;
+  transition: color 0.2s;
+}
+
+.follower-username {
+  font-size: 13px;
+  color: #888;
+  margin: 0;
+}
+
+.back-nav {
+  margin-top: 30px;
+  padding: 0 4%;
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.btn-back {
+  background: none;
+  border: none;
+  color: #888;
+  font-size: 14px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 8px 0;
+  transition: color 0.2s;
+}
+
+.btn-back:hover {
+  color: #fff;
+}

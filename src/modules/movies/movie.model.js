@@ -8,8 +8,10 @@ const movieSchema = new mongoose.Schema({
   director: { type: String },
   cast: [{ type: String }],
   posterUrl: { type: String },
+  backdropUrl: { type: String },
   trailerUrl: { type: String },
   durationMinutes: { type: Number },
+  tmdbId: { type: Number, unique: true, sparse: true },
   // Optional: average normalized rating derived from Rating model
   averageRating: { type: Number, default: 0 },
   totalRatings: { type: Number, default: 0 }

@@ -1,0 +1,170 @@
+.collection-details-page {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-primary);
+  color: var(--text-primary);
+}
+
+.collection-details-main {
+  flex: 1;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 100px 24px 40px;
+  width: 100%;
+}
+
+.breadcrumbs {
+  margin-bottom: 24px;
+  font-size: 0.9rem;
+  color: var(--text-secondary);
+}
+
+.breadcrumbs a {
+  color: var(--text-secondary);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.breadcrumbs a:hover {
+  color: var(--text-primary);
+}
+
+.breadcrumbs .separator {
+  margin: 0 8px;
+  color: var(--text-tertiary);
+}
+
+.breadcrumbs .current {
+  color: var(--text-primary);
+}
+
+.collection-header-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+  padding-bottom: 24px;
+  border-bottom: 1px solid var(--border-color);
+}
+
+.collection-info-main h1 {
+  font-size: 2.5rem;
+  margin-bottom: 8px;
+  font-family: var(--font-heading);
+}
+
+.collection-desc {
+  color: var(--text-secondary);
+  font-size: 1.1rem;
+  margin-bottom: 12px;
+  max-width: 700px;
+}
+
+.collection-meta {
+  color: var(--text-tertiary);
+  font-size: 0.9rem;
+}
+
+.collection-actions {
+  display: flex;
+  gap: 12px;
+}
+
+.btn-outline {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: transparent;
+  border: 1px solid var(--border-color);
+  color: var(--text-primary);
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+}
+
+.btn-outline:hover {
+  background-color: var(--bg-secondary);
+}
+
+.btn-outline.danger {
+  color: #ef4444;
+  border-color: rgba(239, 68, 68, 0.3);
+}
+
+.btn-outline.danger:hover {
+  background-color: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
+}
+
+.collection-movies-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: 24px;
+}
+
+.collection-movie-wrapper {
+  position: relative;
+}
+
+.btn-remove-movie {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background-color: var(--bg-secondary);
+  border: 1px solid var(--border-color);
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  z-index: 10;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+  opacity: 0;
+  transform: scale(0.8);
+}
+
+.collection-movie-wrapper:hover .btn-remove-movie {
+  opacity: 1;
+  transform: scale(1);
+}
+
+.btn-remove-movie:hover {
+  background-color: #ef4444;
+  color: white;
+  border-color: #ef4444;
+}
+
+.warning-text {
+  color: #ef4444;
+  margin-top: 8px;
+  font-size: 0.9rem;
+}
+
+.btn-primary.danger {
+  background-color: #ef4444;
+  color: white;
+}
+
+.btn-primary.danger:hover {
+  background-color: #dc2626;
+  box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+}
+
+@media (max-width: 768px) {
+  .collection-header-section {
+    flex-direction: column;
+    gap: 20px;
+  }
+  
+  .btn-remove-movie {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

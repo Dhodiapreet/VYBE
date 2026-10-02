@@ -7,14 +7,22 @@ const errorHandler = require('./middleware/error.middleware');
 
 const app = express();
 
+app.set('trust proxy', 1); // Trust first proxy for rate limiting behind reverse proxies
+
 // Security Middlewares
 app.use(helmet());
-app.use(cors());
+app.use(cors({
+  origin: process.env.CORS_ORIGIN || process.env.CLIENT_URL || '*',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  credentials: true
+}));
 
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100 // limit each IP to 100 requests per windowMs
+  max: 100, // limit each IP to 100 requests per windowMs
+  standardHeaders: true,
+  legacyHeaders: false,
 });
 app.use('/api/', limiter);
 
@@ -24,8 +32,8 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 // Body parser
-app.use(express.json({ limit: '10mb' }));
-app.use(express.urlencoded({ extended: true, limit: '10mb' }));
+app.use(express.json({ limit: '1mb' }));
+app.use(express.urlencoded({ extended: true, limit: '1mb' }));
 
 // Base route (Health Check)
 app.get('/api/v1/health', (req, res) => {
@@ -65,12 +73,16 @@ const adminRoutes = require('./modules/admin/admin.routes');
 const watchlistRoutes = require('./modules/watchlist/watchlist.routes');
 const recommendationRoutes = require('./modules/recommendations/recommendation.routes');
 const notificationRoutes = require('./modules/notifications/notification.routes');
+const userRoutes = require('./modules/users/user.routes');
+const discussionRoutes = require('./modules/discussions/discussion.routes');
 
 app.use('/api/v1/social', socialRoutes);
 app.use('/api/v1/admin', adminRoutes);
 app.use('/api/v1/watchlist', watchlistRoutes);
 app.use('/api/v1/recommendations', recommendationRoutes);
 app.use('/api/v1/notifications', notificationRoutes);
+app.use('/api/v1/users', userRoutes);
+app.use('/api/v1/discussions', discussionRoutes);
 
 // 404 handler
 app.use((req, res, next) => {

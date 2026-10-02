@@ -1,53 +1,129 @@
-import { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Header from '../../components/Header/Header';
+import Hero from '../../components/Hero/Hero';
+import MovieSection from '../../components/MovieSection/MovieSection';
+import PickOfTheWeek from '../../components/PickOfTheWeek/PickOfTheWeek';
+import CommunityTeaser from '../../components/CommunityTeaser/CommunityTeaser';
+import Footer from '../../components/Footer/Footer';
 import { apiRequest } from '../../services/api';
 import './Home.css';
 
-const sectionNames = ['TALK OF THE TOWN','WATCH IT WITH VYBE','VYBE PICK OF THE WEEK','WORTH WATCHING — NETFLIX',"DON'T MISS THESE — JIOHOTSTAR",'WORTH WATCHING — PRIME','WORTH WATCHING — CRUNCHYROLL'];
-
-function MovieCard({ movie }) {
-  return <article className="movie-card">
-    <div className="movie-poster">{movie.posterUrl ? <img src={movie.posterUrl} alt={movie.title} loading="lazy" /> : <div className="poster-fallback">{movie.title?.[0] || 'V'}</div>}
-      <span className="movie-rating">★ {Number(movie.averageRating || 0).toFixed(1)}</span>
-    </div>
-    <h3>{movie.title}</h3>
-    <p>{movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : '—'} {movie.genres?.length ? '• ' + movie.genres.slice(0,2).join(' • ') : ''}</p>
-  </article>;
-}
-
-function MovieSection({ title, movies }) {
-  return <section className="movie-section">
-    <div className="section-heading"><div><span className="section-kicker">VYBE</span><h2>{title}</h2></div><a href="/movies" className="section-link">Explore →</a></div>
-    <div className="movie-row">{movies.map(movie => <MovieCard key={movie._id} movie={movie} />)}</div>
-  </section>;
-}
-
 export default function Home() {
   const [movies, setMovies] = useState([]);
-  const [state, setState] = useState('loading');
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
   useEffect(() => {
-    apiRequest('/movies').then(result => {
-      const data = Array.isArray(result?.data) ? result.data : Array.isArray(result) ? result : [];
-      setMovies(data); setState(data.length ? 'ready' : 'empty');
-    }).catch(() => setState('error'));
+    const fetchMovies = async () => {
+      try {
+        setLoading(true);
+        const response = await apiRequest('/movies');
+        if (response && response.data) {
+          setMovies(response.data);
+        }
+      } catch (err) {
+        console.error('Error fetching movies:', err);
+        setError(err.message);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchMovies();
   }, []);
 
-  return <div className="home-page">
-    <header className="site-header">
-      <a className="brand" href="/home">VYBE<span>.</span></a>
-      <nav><a href="/home">Home</a><a href="/movies">Movies</a><a href="/search">Search</a></nav>
-      <div className="header-actions"><a href="/login">Log in</a><a className="signup" href="/signup">Sign up</a></div>
-    </header>
-    <main>
-      <section className="hero">
-        <div className="hero-grid" />
-        <div className="hero-copy"><span className="hero-label">ONE PLATFORM. EVERY VIBE.</span><h1>Find something<br /><em>worth feeling.</em></h1><p>Discover movies, share your taste, and find your next VYBE.</p><div className="hero-actions"><a className="primary-button" href="/movies">Explore movies ↗</a><a className="secondary-button" href="/search">Search VYBE</a></div></div>
-        <div className="hero-mark">VYBE</div>
-      </section>
-      {state === 'loading' && <div className="state-card">Loading your VYBE…</div>}
-      {state === 'error' && <div className="state-card error">Unable to load movies. Please try again.</div>}
-      {state === 'empty' && <div className="state-card">No movies are available yet.</div>}
-      {state === 'ready' && sectionNames.map((name, i) => <MovieSection key={name} title={name} movies={movies.slice((i * 3) % movies.length, ((i * 3) % movies.length) + 8)} />)}
-    </main>
-    <footer className="site-footer"><div><a className="brand" href="/home">VYBE<span>.</span></a><p>One platform. Every vibe.</p></div><div className="footer-links"><a href="/movies">Movies</a><a href="/search">Search</a><a href="/login">Login</a></div><small>© 2026 VYBE. Made for movie people.</small></footer>
-  </div>;
+  const heroMovie = movies.length > 0 ? movies[0] : null;
+
+  // Safe slicing helper
+  const getSlice = (start, end) => {
+    if (!movies || movies.length === 0) return [];
+    const len = movies.length;
+    if (len >= end) return movies.slice(start, end);
+    // if we have fewer movies, just return whatever we can by wrapping or just duplicating some
+    const result = [];
+    for (let i = start; i < end; i++) {
+      result.push({ ...movies[i % len], _id: movies[i % len]._id + '-' + i }); // prevent duplicate keys
+    }
+    return result;
+  };
+
+  const talkOfTheTown = getSlice(0, 10);
+  const watchWithVybe = getSlice(5, 15);
+  
+  const powMain = movies.length > 10 ? movies[10] : movies[0];
+  const powSupport = getSlice(11, 15);
+
+  const netflix = getSlice(2, 10);
+  const jiohotstar = getSlice(4, 12);
+  const prime = getSlice(6, 14);
+  const crunchyroll = getSlice(8, 16);
+
+  return (
+    <div className="home-page">
+      <Header />
+      
+      <main>
+        <Hero featuredMovie={heroMovie} />
+        
+        <div className="content-sections">
+          <MovieSection 
+            title="TALK OF THE TOWN" 
+            movies={talkOfTheTown} 
+            loading={loading} 
+            error={error} 
+          />
+          
+          <MovieSection 
+            title="WATCH IT WITH VYBE" 
+            movies={watchWithVybe} 
+            loading={loading} 
+            error={error} 
+          />
+          
+          {!loading && !error && powMain && (
+            <PickOfTheWeek 
+              mainMovie={powMain}
+              supportingMovies={powSupport}
+            />
+          )}
+
+          <MovieSection 
+            sectionLabel="Streaming Now"
+            title="WORTH WATCHING — NETFLIX" 
+            movies={netflix} 
+            loading={loading} 
+            error={error} 
+          />
+          
+          <MovieSection 
+            sectionLabel="Streaming Now"
+            title="DON'T MISS THESE — JIOHOTSTAR" 
+            movies={jiohotstar} 
+            loading={loading} 
+            error={error} 
+          />
+
+          <CommunityTeaser />
+          
+          <MovieSection 
+            sectionLabel="Streaming Now"
+            title="WORTH WATCHING — PRIME VIDEO" 
+            movies={prime} 
+            loading={loading} 
+            error={error} 
+          />
+          
+          <MovieSection 
+            sectionLabel="Streaming Now"
+            title="WORTH WATCHING — CRUNCHYROLL" 
+            movies={crunchyroll} 
+            loading={loading} 
+            error={error} 
+          />
+        </div>
+      </main>
+
+      <Footer />
+    </div>
+  );
 }

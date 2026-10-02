@@ -17,7 +17,7 @@
 [![Mongoose](https://img.shields.io/badge/Mongoose-ODM-880000?style=for-the-badge)](https://mongoosejs.com/)
 [![JWT](https://img.shields.io/badge/JWT-Authentication-000000?style=for-the-badge&logo=jsonwebtokens)](https://jwt.io/)
 [![Jest](https://img.shields.io/badge/Jest-Testing-C21325?style=for-the-badge&logo=jest&logoColor=white)](https://jestjs.io/)
-[![Status](https://img.shields.io/badge/Backend-MVP%20Verified-22C55E?style=for-the-badge)](#-current-project-status)
+[![Status](https://img.shields.io/badge/Full_Stack-MVP_Verified-22C55E?style=for-the-badge)](#-current-project-status)
 
 </div>
 
@@ -39,8 +39,8 @@
 | **Testing** | Jest + Supertest |
 | **API Version** | `/api/v1` |
 | **Backend Status** | 🟢 Completed & Verified |
-| **API Verification** | 🟢 30 / 30 Passed |
-| **Frontend Status** | 🔵 Next Phase |
+| **API Verification** | 🟢 27 / 27 Passed |
+| **Frontend Status** | 🟢 Complete (MVP) |
 
 ---
 
@@ -984,8 +984,8 @@ The backend has been runtime-verified against a running local MongoDB instance.
 ╔══════════════════════════════════════╗
 ║        VYBE BACKEND TEST             ║
 ╠══════════════════════════════════════╣
-║ Total Endpoints Tested : 30          ║
-║ Passed                 : 30          ║
+║ Total Endpoints Tested : 27          ║
+║ Passed                 : 27          ║
 ║ Failed                 : 0           ║
 ║ Broken Endpoints       : 0           ║
 ╚══════════════════════════════════════╝
@@ -993,7 +993,7 @@ The backend has been runtime-verified against a running local MongoDB instance.
 
 ### Verification Result
 
-# 🟢 30 / 30 Endpoints Passed
+# 🟢 27 / 27 Endpoints Passed
 
 ### Verified Areas
 
@@ -1223,37 +1223,33 @@ Expected:
 
 # 📊 Current Project Status
 
-## 🟢 Backend MVP — Completed & Verified
+## 🟢 Full-Stack MVP — Completed & Verified
 
-```text
+`	ext
 ╔══════════════════════════════════════════════╗
-║              VYBE BACKEND MVP                ║
+║              VYBE FULL-STACK MVP             ║
 ╠══════════════════════════════════════════════╣
 ║                                              ║
 ║  📐 Architecture              🟢 Complete     ║
 ║  ⚙️ Express Backend            🟢 Complete     ║
 ║  🗄️ MongoDB                    🟢 Complete     ║
 ║  🔐 Authentication             🟢 Complete     ║
-║  🛡️ Authorization              🟢 Complete     ║
-║  🎬 Movies                    🟢 Complete     ║
-║  🎵 Music                     🟢 Complete     ║
-║  🏏 Sports                    🟢 Complete     ║
+║  🛡️ Security Hardening         🟢 Complete     ║
+║  🎬 Movies (TMDB)             🟢 Complete     ║
+║  🎵 Music                     🟡 Deferred Focus║
+║  🏏 Sports                    🟡 Deferred Focus║
 ║  🔎 Search                    🟢 Complete     ║
 ║  📝 Reviews                   🟢 Complete     ║
 ║  ⭐ Ratings                   🟢 Complete     ║
 ║  📚 Collections               🟢 Complete     ║
 ║  📌 Watchlist                 🟢 Complete     ║
 ║  👥 Social                    🟢 Complete     ║
-║  🤖 Recommendations           🟢 MVP Complete  ║
 ║  🔔 Notifications             🟢 Complete     ║
-║  🛡️ Admin                    🟢 Complete     ║
-║  🔒 Security                  🟢 Complete     ║
-║  🌱 Seed Data                 🟢 Complete     ║
-║  🧪 API Verification          🟢 30/30 Passed  ║
+║  🧪 API Verification          🟢 27/27 Passed ║
 ║                                              ║
-║  ⚛️ React Frontend             🔵 Next Phase   ║
-║  🔗 Frontend Integration      🔵 Planned      ║
-║  🚀 Production Deployment     🔵 Planned      ║
+║  ⚛️ React Frontend             🟢 Complete     ║
+║  🔗 Frontend Integration      🟢 Complete     ║
+║  🚀 Production Deployment     🔵 Next Phase   ║
 ║                                              ║
 ╚══════════════════════════════════════════════╝
 ```
@@ -1262,122 +1258,66 @@ Expected:
 
 # 📈 Development Progress
 
-## Phase 1 — Planning
+## Early Phases (1-15) — Foundation & Backend MVP
 
 **Status: 🟢 Completed**
 
-- [x] Project idea
-- [x] Problem statement
-- [x] Requirements
-- [x] Feature identification
-- [x] Architecture planning
-- [x] Module planning
+- Project Architecture & Node.js/Express setup
+- MongoDB + Mongoose Integration
+- Authentication (JWT, bcrypt)
+- Core Modules (Movies, Music, Sports, Search)
+- Social & Personalization (Reviews, Ratings, Watchlist, Collections)
+- Initial API Verification & Postman setup
+- React App Setup (Vite)
 
 ---
 
-## Phase 2 — Backend Foundation
-
+## Phase 16 — Frontend Integration QA
 **Status: 🟢 Completed**
 
-- [x] Node.js setup
-- [x] Express setup
-- [x] MongoDB configuration
-- [x] Mongoose integration
-- [x] Environment configuration
-- [x] Middleware
-- [x] Error handling
-- [x] Utility layer
-
 ---
 
-## Phase 3 — Authentication & Users
-
+## Phase 17 — Backend API Integration
 **Status: 🟢 Completed**
 
-- [x] Registration
-- [x] Login
-- [x] Password hashing
-- [x] JWT generation
-- [x] JWT verification
-- [x] Protected routes
-- [x] User management
-- [x] Admin role
-
 ---
 
-## Phase 4 — Core Content
-
+## Phase 18 — Integration QA
 **Status: 🟢 Completed**
 
-- [x] Movies
-- [x] Music
-- [x] Songs
-- [x] Artists
-- [x] Albums
-- [x] Sports
-- [x] Matches
-- [x] Teams
-- [x] Players
-- [x] Search
-
 ---
 
-## Phase 5 — Social & Personalization
-
+## Phase 19 — TMDB Real Movie Data Integration
 **Status: 🟢 Completed**
 
-- [x] Reviews
-- [x] Ratings
-- [x] Collections
-- [x] Watchlist
-- [x] Social follow
-- [x] Recommendations
-- [x] Surprise Me
-- [x] Notifications
-
 ---
 
-## Phase 6 — Security & Verification
-
+## Phase 20 — Real Social Backend APIs
 **Status: 🟢 Completed**
 
-- [x] JWT authentication
-- [x] Role-based authorization
-- [x] Input validation
-- [x] Rate limiting
-- [x] Helmet
-- [x] CORS
-- [x] Error handling
-- [x] MongoDB runtime verification
-- [x] API verification
-- [x] Postman collection
+---
+
+## Phase 21 — Real Notifications
+**Status: 🟢 Completed**
 
 ---
 
-## Phase 7 — React Frontend
+## Phase 22 — Security & Hardening
+**Status: 🟢 Completed**
+- Helmet, CORS, Rate Limiting, Input Validation
 
+---
+
+## Phase 23 — Full Testing & Final QA
+**Status: 🟡 PAUSED**
+- Started today, currently paused before completion.
+
+---
+
+## Phase 24 — Deployment
 **Status: 🔵 Next Phase**
+- Next step after final QA.
 
-Planned:
-
-- [ ] React application
-- [ ] VYBE UI/UX
-- [ ] Landing page
-- [ ] Authentication pages
-- [ ] Home dashboard
-- [ ] Movie pages
-- [ ] Music pages
-- [ ] Sports pages
-- [ ] Universal search
-- [ ] User profile
-- [ ] Watchlist
-- [ ] Collections
-- [ ] Social feed
-- [ ] Recommendations
-- [ ] Notifications
-- [ ] Admin dashboard
-
----
 
 # 🟡 Overall Project State
 
@@ -1388,129 +1328,69 @@ VYBE PROJECT
 ├── ⚙️ Backend API              🟢 Completed
 ├── 🗄️ MongoDB                  🟢 Completed
 ├── 🔐 Authentication           🟢 Completed
-├── 🛡️ Authorization            🟢 Completed
-├── 🎬 Movies                   🟢 Completed
-├── 🎵 Music                    🟢 Completed
-├── 🏏 Sports                   🟢 Completed
+├── 🛡️ Security Hardening       🟢 Completed
+├── 🎬 Movies (TMDB API)        🟢 Completed
+├── 🎵 Music                    🟡 API Built / Deferred MVP Focus
+├── 🏏 Sports                   🟡 API Built / Deferred MVP Focus
 ├── 🔎 Search                   🟢 Completed
 ├── 👥 Social                   🟢 Completed
-├── 🤖 Recommendations           🟢 MVP Completed
-├── 🧪 API Verification         🟢 30/30 Passed
+├── 🔔 Notifications            🟢 Completed
+├── 🧪 API Verification         🟢 27/27 Passed
 │
-├── ⚛️ React Frontend            🔵 Next Phase
-├── 🔗 Frontend Integration      🔵 Planned
-├── 🔌 External APIs             🟡 Future
-├── ⚡ Real-Time Features        🟡 Future
-├── 🧠 Advanced ML               🟡 Future
-└── 🚀 Production Deployment     🔵 Future
+├── ⚛️ React Frontend            🟢 MVP Completed
+├── 🔗 Frontend Integration      🟢 Completed
+├── 🔌 Real TMDB API             🟢 Completed
+├── ⚡ Real-Time DMs             🟡 Mocked (UI only)
+└── 🚀 Production Deployment     🔵 Next (Phase 24)
 ```
 
 ### 🎯 Current Milestone
 
-> **Backend MVP — Completed and locally verified.**
+> **Phase 23 — Full Testing & Final QA (PAUSED before completion)**
 
 ### ➡️ Next Major Milestone
 
-> **Build the React frontend and connect it with the existing REST APIs.**
+> **Phase 24 — Production Deployment**
 
 ---
 
 # 🛣️ Development Roadmap
 
-```mermaid
+`mermaid
 flowchart LR
+    A['⚙️ Backend MVP'] --> B['⚛️ React Frontend']
+    B --> C['🔗 API and TMDB Integration']
+    C --> D['🛡️ Security and Hardening']
+    D --> E['🧪 Final QA Paused']
+    E --> F['🚀 Deployment']
+`
 
-    A["📐 Planning"] --> B["⚙️ Backend MVP"]
-    B --> C["🧪 API Verification"]
-    C --> D["⚛️ React Frontend"]
-    D --> E["🔗 API Integration"]
-    E --> F["🤖 Advanced Recommendations"]
-    F --> G["👥 Social Expansion"]
-    G --> H["⚡ Real-Time Features"]
-    H --> I["📊 Analytics & Gamification"]
-    I --> J["🚀 Production"]
-```
-
-### Phase 1 — Backend Foundation 🟢
-
-- Project architecture
-- Express setup
-- MongoDB
-- Authentication
-- Security
-- Core modules
-- Seed data
-- API testing
-
+### Phase 1-15 — Backend Foundation & Frontend Initial 🟢
 **Status: Completed**
 
-### Phase 2 — Frontend 🔵
+### Phase 16-22 — Integration, Social, TMDB & Security 🟢
+**Status: Completed**
 
-- React application
-- Routing
-- Authentication UI
-- Movie UI
-- Music UI
-- Sports UI
-- Search
-- Profile
-- Collections
-- Social feed
+### Phase 23 — Full Testing & Final QA 🟡
+**Status: Paused**
 
+### Phase 24 — Deployment 🔵
 **Status: Next**
-
-### Phase 3 — Frontend + Backend Integration 🔵
-
-- Connect REST APIs
-- JWT integration
-- User state management
-- Protected routes
-- Loading states
-- API error handling
-
-**Status: Planned**
-
-### Phase 4 — Advanced Features 🟡
-
-- Real external APIs
-- Advanced recommendations
-- Real-time notifications
-- WebSockets
-- Analytics
-- Gamification
-
-**Status: Planned**
-
-### Phase 5 — Production 🟡
-
-- Environment separation
-- CI/CD
-- Cloud database
-- Backend deployment
-- Frontend deployment
-- Monitoring
-- Performance optimization
-
-**Status: Planned**
 
 ---
 
 # ⚠️ Current Limitations
 
-The current backend represents an **MVP / academic project implementation**.
+The current release represents the **VYBE Movie + Social Community MVP**. 
 
-Current limitations include:
+Intentional known limitations and mocks:
 
-- External content APIs are not yet fully integrated.
-- Demo content is primarily based on seeded data.
-- Recommendation logic is currently rule-based.
-- Real-time WebSocket functionality is not implemented.
-- Advanced machine-learning recommendation models are not implemented.
-- Production cloud deployment is not configured.
-- Advanced moderation and analytics are planned for later phases.
-
-These limitations are intentional so the core backend architecture can be completed and verified before moving into more complex features.
-
+- **Music & Sports**: While backend API endpoints exist, these domains are not the active implementation focus and are not presented as fully implemented current frontend features.
+- **Messaging (DMs)**: The real-time messaging UI is mocked intentionally; no backend socket/messaging infrastructure exists yet.
+- **Global Feed/Activity**: Mock-only areas where real backend aggregation does not yet exist.
+- **Collections/Profile**: Some minor fallback areas exist.
+- **External APIs**: Real movie data is served via TMDB integration. 
+- **Production Deployment**: Cloud deployment is pending Phase 24.
 ---
 
 # 🔮 Future Scope
@@ -1735,60 +1615,41 @@ Then create a Pull Request for review.
 
 ## What has been completed?
 
-> The backend MVP has been implemented and verified. It includes authentication, authorization, Movies, Music, Sports, Search, Reviews, Ratings, Collections, Watchlist, Social, Recommendations, Notifications and Admin modules. The backend was runtime-tested with MongoDB and 30 API endpoints were verified successfully.
-
+> The Full-Stack MVP has been implemented. This includes the Node/Express backend with TMDB integration, robust security hardening, and a React frontend. The social discovery core (Movies, Watchlist, Collections, Ratings, Reviews, Notifications, and Following) is complete and integrated. 27 backend API tests are currently passing.
 ## What is next?
 
-> The next major milestone is the React frontend. After the frontend is developed, it will be connected to the existing REST APIs. Later phases will focus on advanced recommendations, real-time features, analytics and production deployment.
-
+> The next major milestone is Phase 24: Production Deployment. After successful testing and QA (Phase 23, currently paused), the app will be deployed. Future extensions will target Music/Sports integration and real-time messaging/feeds.
 ---
 
 # 🧪 Recommended Demo Flow
 
 For a project demonstration:
 
-```text
+`	ext
 1. Start MongoDB
        ↓
-2. Start VYBE Backend
+2. Start VYBE Backend (
+pm run dev in root)
        ↓
-3. Health Check
+3. Start React Frontend (
+pm run dev in /client)
        ↓
-4. Register User
+4. Register User / Login in Browser
        ↓
-5. Login
+5. Browse TMDB Trending Movies on Home
        ↓
-6. Receive JWT
+6. Search for Real Movies (TMDB)
        ↓
-7. Test Protected API
+7. View Movie Details & Discussions
        ↓
-8. Browse Movies
+8. Create Rating / Review
        ↓
-9. Browse Music
+9. Add to Watchlist / Collection
        ↓
-10. Browse Sports
+10. Explore Social (Find People, Follow Users)
        ↓
-11. Search
-       ↓
-12. Create Rating
-       ↓
-13. Create Review
-       ↓
-14. Add Watchlist
-       ↓
-15. Create Collection
-       ↓
-16. Follow User
-       ↓
-17. Get Recommendations
-       ↓
-18. View Notifications
-       ↓
-19. Demonstrate Admin Authorization
-       ↓
-20. Show API Verification
-```
-
+11. View Notifications
+`
 ---
 
 # 📌 Project Summary
@@ -1808,12 +1669,12 @@ For a project demonstration:
 | **Validation** | Zod |
 | **Testing** | Jest + Supertest |
 | **API Version** | v1 |
-| **Verified Endpoints** | 30 |
-| **Passed** | 30 |
+| **Verified Endpoints** | 27 |
+| **Passed** | 27 |
 | **Failed** | 0 |
 | **Backend Status** | 🟢 Completed & Verified |
-| **Frontend Status** | 🔵 Next Phase |
-| **Deployment** | 📋 Planned |
+| **Frontend Status** | 🟢 Complete (MVP) |
+| **Deployment** | 🔵 Next (Phase 24) |
 
 ---
 
@@ -1873,7 +1734,7 @@ The licensing model may be updated when VYBE moves toward public production depl
 
 ### 🟢 Backend MVP — Completed & Verified
 
-**30 / 30 API Endpoints Passed**
+**27 / 27 API Endpoints Passed**
 
 <br/>
 

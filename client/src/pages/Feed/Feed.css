@@ -1,0 +1,372 @@
+.feed-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  padding-top: 80px;
+}
+
+.feed-header-section {
+  padding: 40px 4% 20px;
+  background: linear-gradient(180deg, rgba(170, 59, 255, 0.05) 0%, transparent 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+.feed-intro {
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.feed-intro h1 {
+  font-size: 2.5rem;
+  font-weight: 800;
+  margin-bottom: 12px;
+  background: linear-gradient(90deg, #ffffff, #a0a0a0);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+}
+
+.feed-intro p {
+  font-size: 1.1rem;
+  color: var(--text);
+  margin: 0;
+}
+
+.feed-container {
+  display: flex;
+  gap: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 32px 4% 60px;
+  width: 100%;
+}
+
+.feed-main {
+  flex: 1;
+  max-width: 800px;
+}
+
+.feed-tabs {
+  display: flex;
+  gap: 16px;
+  margin-bottom: 24px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 2px;
+}
+
+.feed-tab {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  font-size: 1rem;
+  font-weight: 600;
+  padding: 12px 16px;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.2s;
+  font-family: var(--sans);
+}
+
+.feed-tab:hover {
+  color: var(--text-h);
+}
+
+.feed-tab.active {
+  color: var(--accent);
+}
+
+.feed-tab.active::after {
+  content: '';
+  position: absolute;
+  bottom: -3px;
+  left: 0;
+  right: 0;
+  height: 3px;
+  background: var(--accent);
+  border-radius: 3px 3px 0 0;
+}
+
+.feed-list {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+
+.feed-card {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+  transition: transform 0.2s, background 0.2s;
+}
+
+.feed-card:hover {
+  background: rgba(255, 255, 255, 0.03);
+}
+
+.feed-card-header {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+.user-avatar {
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--accent), #6b21a8);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 1.2rem;
+}
+
+.user-avatar.small {
+  width: 36px;
+  height: 36px;
+  font-size: 1rem;
+}
+
+.user-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.user-name {
+  font-weight: 700;
+  color: var(--text-h);
+  font-size: 1rem;
+}
+
+.user-handle {
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.timestamp {
+  margin-left: auto;
+  color: var(--text);
+  font-size: 0.85rem;
+}
+
+.feed-card-body {
+  margin-bottom: 20px;
+}
+
+.rating-stars {
+  margin-bottom: 12px;
+  display: flex;
+  gap: 2px;
+}
+
+.star {
+  font-size: 1.2rem;
+}
+
+.star.filled {
+  color: var(--accent);
+}
+
+.star.half {
+  color: var(--accent);
+  opacity: 0.7;
+}
+
+.star.empty {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+.feed-text {
+  font-size: 1rem;
+  line-height: 1.5;
+  color: rgba(255, 255, 255, 0.9);
+  margin: 0 0 16px 0;
+}
+
+.feed-text-large {
+  font-size: 1.1rem;
+  font-style: italic;
+}
+
+.feed-movie-attachment {
+  display: flex;
+  gap: 16px;
+  background: rgba(0, 0, 0, 0.3);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 8px;
+  padding: 12px;
+  align-items: center;
+}
+
+.movie-poster-thumb {
+  width: 60px;
+  height: 90px;
+  border-radius: 6px;
+  object-fit: cover;
+}
+
+.movie-meta-info h4 {
+  margin: 0 0 4px 0;
+  font-size: 1.1rem;
+}
+
+.movie-meta-info .movie-year {
+  color: var(--text);
+  font-size: 0.9rem;
+}
+
+.feed-card-actions {
+  display: flex;
+  gap: 24px;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 16px;
+}
+
+.action-btn {
+  background: transparent;
+  border: none;
+  color: var(--text);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+  font-family: var(--sans);
+  font-size: 0.95rem;
+  transition: color 0.2s;
+  padding: 8px;
+  border-radius: 8px;
+}
+
+.action-btn:hover, .action-btn:focus-visible {
+  color: var(--text-h);
+  background: rgba(255, 255, 255, 0.05);
+  outline: none;
+}
+
+.action-btn.liked {
+  color: var(--accent);
+}
+
+.action-btn.liked svg {
+  fill: var(--accent);
+}
+
+.share-btn {
+  margin-left: auto;
+}
+
+/* Sidebar Styles */
+.feed-sidebar {
+  width: 320px;
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+
+.sidebar-widget {
+  background: rgba(255, 255, 255, 0.02);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 16px;
+  padding: 24px;
+}
+
+.sidebar-widget h3 {
+  margin: 0 0 20px 0;
+  font-size: 1.2rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding-bottom: 12px;
+}
+
+.trending-list, .active-people-list {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.trending-item {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  cursor: pointer;
+}
+
+.trending-title {
+  font-weight: 600;
+  color: var(--text-h);
+}
+
+.trending-mentions {
+  font-size: 0.85rem;
+  color: var(--text);
+}
+
+.trending-item:hover .trending-title {
+  color: var(--accent);
+}
+
+.active-person-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.btn-follow-small {
+  margin-left: auto;
+  background: transparent;
+  border: 1px solid var(--accent);
+  color: var(--accent);
+  border-radius: 20px;
+  padding: 4px 12px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.btn-follow-small:hover {
+  background: var(--accent);
+  color: #fff;
+}
+
+/* Empty State */
+.empty-state {
+  text-align: center;
+  padding: 60px 20px;
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.01);
+  border-radius: 12px;
+  border: 1px dashed rgba(255, 255, 255, 0.1);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .feed-container {
+    flex-direction: column;
+  }
+  
+  .feed-sidebar {
+    width: 100%;
+  }
+}
+
+@media (max-width: 600px) {
+  .feed-card {
+    padding: 16px;
+  }
+  
+  .feed-card-header {
+    flex-wrap: wrap;
+  }
+  
+  .timestamp {
+    width: 100%;
+    margin-left: 0;
+    margin-top: 4px;
+    padding-left: 60px;
+  }
+}

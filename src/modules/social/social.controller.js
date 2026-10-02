@@ -11,6 +11,21 @@ exports.follow = asyncHandler(async (req, res) => {
     { follower: req.user._id, followingId: req.params.userId, onModel: 'User' },
     { new: true, upsert: true }
   );
+
+  // Create follow notification
+  const Notification = require('../notifications/notification.model');
+  await Notification.findOneAndUpdate(
+    { recipient: req.params.userId, type: 'follow', actor: req.user._id },
+    { 
+      recipient: req.params.userId,
+      type: 'follow',
+      actor: req.user._id,
+      action: 'started following you',
+      isRead: false
+    },
+    { upsert: true, new: true }
+  );
+
   res.status(200).json(new ApiResponse(200, follow));
 });
 exports.unfollow = asyncHandler(async (req, res) => {
