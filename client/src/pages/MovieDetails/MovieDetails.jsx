@@ -53,7 +53,7 @@ export default function MovieDetails() {
   const navigate = useNavigate();
   const [movie, setMovie] = useState(null);
   const [loading, setLoading] = useState(true);
-  
+
   // Local mock state
   const [isInWatchlist, setIsInWatchlist] = useState(false);
   const [isCollectionModalOpen, setIsCollectionModalOpen] = useState(false);
@@ -61,9 +61,9 @@ export default function MovieDetails() {
     { id: 'c1', name: 'Sci-Fi Masterpieces', hasMovie: false },
     { id: 'c2', name: 'Weekend Binge', hasMovie: true }
   ]);
-  
+
   const currentUserUsername = 'janedoe';
-  
+
   const [reviews, setReviews] = useState([]);
   const [isComposerOpen, setIsComposerOpen] = useState(false);
   const { addNotification } = useNotifications();
@@ -72,14 +72,14 @@ export default function MovieDetails() {
   useEffect(() => {
     // Scroll to top when ID changes
     window.scrollTo(0, 0);
-    
+
     const fetchMovie = async () => {
       try {
         setLoading(true);
         const res = await apiRequest(`/movies/${id}`);
         if (res && res.data) {
           setMovie(res.data);
-          
+
           // Also fetch reviews if we have a reviews endpoint, or keep mock reviews for now
           // If the backend has GET /reviews?movie=<id>, we could do it:
           try {
@@ -87,10 +87,10 @@ export default function MovieDetails() {
             if (reviewsRes && reviewsRes.data) {
               setReviews(reviewsRes.data);
             }
-          } catch(error) {
-             console.warn('Could not fetch reviews, using mock data:', error.message);
-             const movieReviews = INITIAL_MOCK_REVIEWS.filter(r => r.movieId === id);
-             setReviews(movieReviews);
+          } catch (error) {
+            console.warn('Could not fetch reviews, using mock data:', error.message);
+            const movieReviews = INITIAL_MOCK_REVIEWS.filter(r => r.movieId === id);
+            setReviews(movieReviews);
           }
         } else {
           setMovie(null);
@@ -102,7 +102,7 @@ export default function MovieDetails() {
         setLoading(false);
       }
     };
-    
+
     fetchMovie();
   }, [id]);
 
@@ -136,7 +136,7 @@ export default function MovieDetails() {
   }
 
   const releaseYear = movie.releaseDate ? new Date(movie.releaseDate).getFullYear() : 'Unknown';
-  
+
   // Get similar movies (just taking the first 4 other movies for mock)
   const similarMovies = MOCK_MOVIES.filter(m => m._id !== id).slice(0, 4);
 
@@ -163,7 +163,7 @@ export default function MovieDetails() {
         else if (reviewData.rating >= 7) rv = 'LOVED IT';
         else if (reviewData.rating <= 4) rv = 'SKIP';
         else if (reviewData.rating <= 6) rv = 'AVERAGE';
-        
+
         await apiRequest('/ratings', {
           method: 'POST',
           body: JSON.stringify({
@@ -180,7 +180,7 @@ export default function MovieDetails() {
         id: `new-${Date.now()}`,
         movieId: id,
         username: currentUserUsername,
-        displayName: 'You', 
+        displayName: 'You',
         avatar: 'Y',
         date: new Date().toISOString(),
         likes: 0,
@@ -188,7 +188,7 @@ export default function MovieDetails() {
         ...reviewData
       };
       setReviews(prev => [newReview, ...prev]);
-      
+
       addNotification({ type: 'milestone', actor: { name: 'VYBE', avatar: 'vybe' }, action: 'You posted a review for', target: { title: movie?.title, id: id } });
     } catch (err) {
       console.error('Failed to submit review/rating', err);
@@ -222,7 +222,7 @@ export default function MovieDetails() {
   return (
     <div className="movie-details-page">
       <Header />
-      
+
       <main className="movie-details-main">
         {/* Cinematic Backdrop Hero */}
         <section className="movie-hero" style={{ backgroundImage: `url(${movie.backdropUrl || movie.posterUrl})` }}>
@@ -232,27 +232,27 @@ export default function MovieDetails() {
               <span className="separator">/</span>
               <span className="current">{movie.title}</span>
             </div>
-            
+
             <div className="hero-content">
               <div className="hero-poster-container">
                 <img src={movie.posterUrl} alt={movie.title} className="hero-poster" />
               </div>
-              
+
               <div className="hero-info">
                 <h1 className="movie-title-large">{movie.title}</h1>
-                
+
                 <div className="movie-metadata-row">
                   <span className="meta-item year">{releaseYear}</span>
                   <span className="meta-separator">•</span>
                   <span className="meta-item rating">★ {movie.averageRating?.toFixed(1) || 'NR'}</span>
                   <span className="meta-separator">•</span>
-                  <span className="meta-item runtime">{movie.durationMinutes ? `${Math.floor(movie.durationMinutes/60)}h ${movie.durationMinutes%60}m` : (movie.runtime ? `${Math.floor(movie.runtime/60)}h ${movie.runtime%60}m` : 'Unknown runtime')}</span>
+                  <span className="meta-item runtime">{movie.durationMinutes ? `${Math.floor(movie.durationMinutes / 60)}h ${movie.durationMinutes % 60}m` : (movie.runtime ? `${Math.floor(movie.runtime / 60)}h ${movie.runtime % 60}m` : 'Unknown runtime')}</span>
                   <span className="meta-separator">•</span>
                   <span className="meta-item genres">{movie.genres?.join(', ') || 'N/A'}</span>
                 </div>
-                
+
                 <p className="movie-description">{movie.description}</p>
-                
+
                 <div className="crew-info">
                   {movie.director && (
                     <div className="crew-block">
@@ -267,15 +267,15 @@ export default function MovieDetails() {
                     </div>
                   )}
                 </div>
-                
+
                 <div className="action-buttons">
                   <button className="btn-primary action-btn">
                     <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                      <path d="M8 5v14l11-7z"/>
+                      <path d="M8 5v14l11-7z" />
                     </svg>
                     Watch Trailer
                   </button>
-                  <button 
+                  <button
                     className={`btn-secondary action-btn ${isInWatchlist ? 'active' : ''}`}
                     onClick={() => { setIsInWatchlist(!isInWatchlist); if (!isInWatchlist) addNotification({ type: 'watchlist', actor: { name: 'You', avatar: 'vybe' }, action: 'added', target: { title: movie.title, id: movie._id }, actionSuffix: 'to your watchlist' }); }}
                   >
@@ -284,10 +284,9 @@ export default function MovieDetails() {
                     </svg>
                     {isInWatchlist ? 'In Watchlist' : 'Watchlist'}
                   </button>
-                  <button 
+                  <button
                     className="btn-secondary action-btn"
-                    onClick={() => setIsCollectionModalOpen(true)}
-                  >
+                    onClick={handleOpenCollectionModal}                  >
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="20" height="20">
                       <rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect>
                       <line x1="12" y1="8" x2="12" y2="16"></line>
@@ -301,7 +300,7 @@ export default function MovieDetails() {
                     </svg>
                     Discussions
                   </Link>
-                  <button 
+                  <button
                     className="btn-outline action-btn"
                     onClick={() => handleOpenComposer(currentUserReview)}
                   >
@@ -333,7 +332,7 @@ export default function MovieDetails() {
           <div className="section-header">
             <h2 className="section-title">Community Reviews</h2>
             {!currentUserReview && (
-              <button 
+              <button
                 className="btn-outline small"
                 onClick={() => handleOpenComposer()}
               >
@@ -341,21 +340,21 @@ export default function MovieDetails() {
               </button>
             )}
           </div>
-          
-          <ReviewList 
-            reviews={reviews} 
+
+          <ReviewList
+            reviews={reviews}
             currentUserUsername={currentUserUsername}
             onEditReview={handleOpenComposer}
             onDeleteReview={handleDeleteReview}
             onToggleLike={handleToggleLike}
           />
         </section>
-        
+
       </main>
-      
+
       <Footer />
 
-      <ReviewComposer 
+      <ReviewComposer
         isOpen={isComposerOpen}
         onClose={() => setIsComposerOpen(false)}
         onSubmit={handleSubmitReview}
@@ -380,7 +379,7 @@ export default function MovieDetails() {
             </div>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '12px', maxHeight: '300px', overflowY: 'auto' }}>
               {collections.map(c => (
-                <button 
+                <button
                   key={c.id}
                   style={{
                     display: 'flex', justifyContent: 'space-between', alignItems: 'center',
@@ -399,8 +398,8 @@ export default function MovieDetails() {
               ))}
             </div>
             <div style={{ marginTop: '24px', paddingTop: '16px', borderTop: '1px solid var(--border-color)' }}>
-              <button 
-                className="btn-outline" 
+              <button
+                className="btn-outline"
                 style={{ width: '100%', display: 'flex', justifyContent: 'center' }}
                 onClick={() => {
                   setIsCollectionModalOpen(false);
