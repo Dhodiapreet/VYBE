@@ -1,25 +1,11 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Link } from 'react-router-dom';
+import { useAuth } from '../../contexts/AuthContext';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import StarRating from '../../components/Reviews/StarRating';
 import './Profile.css';
-
-const INITIAL_USER = {
-  displayName: "Jane Doe",
-  username: "@janedoe",
-  avatarUrl: "https://via.placeholder.com/150x150/aa3bff/ffffff?text=JD",
-  bio: "Cinematography enthusiast. Sci-fi geek. I write reviews about movies that make me feel something.",
-  location: "Los Angeles, CA",
-  joined: "March 2024",
-  stats: {
-    reviews: 42,
-    ratings: 156,
-    followers: 1205,
-    following: 340
-  }
-};
 
 const MOCK_WATCHLIST = [
   { _id: '1', title: 'Interstellar', posterUrl: 'https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg', releaseDate: '2014-11-07', genres: ['Sci-Fi'], averageRating: 8.6 },
@@ -61,15 +47,74 @@ const MOCK_ACTIVITY = [
 ];
 
 export default function Profile() {
-  const [user, setUser] = useState(INITIAL_USER);
+  const { user: authUser, loading } = useAuth();
+
   const [activeTab, setActiveTab] = useState('watchlist');
   const [isEditModalOpen, setIsEditModalOpen] = useState(false);
-  
+
+  const [user, setUser] = useState(null);
+
   const [editForm, setEditForm] = useState({
-    displayName: user.displayName,
-    bio: user.bio,
-    location: user.location,
+    displayName: '',
+    bio: '',
+    location: '',
   });
+
+  useEffect(() => {
+    if (authUser) {
+      const profileData = {
+        displayName: authUser.username || authUser.name || 'User',
+        username: `@${authUser.username || 'user'}`,
+        email: authUser.email || '',
+        avatarUrl:
+          authUser.avatarUrl ||
+          `https://via.placeholder.com/150x150/aa3bff/ffffff?text=${(
+            authUser.username || 'U'
+          )
+            .charAt(0)
+            .toUpperCase()}`,
+        bio: authUser.bio || 'Welcome to VYBE!',
+        location: authUser.location || 'Location not set',
+        joined: authUser.createdAt
+          ? new Date(authUser.createdAt).toLocaleDateString()
+          : 'Recently',
+        stats: {
+          reviews: authUser.stats?.reviews || 0,
+          ratings: authUser.stats?.ratings || 0,
+          followers: authUser.stats?.followers || 0,
+          following: authUser.stats?.following || 0,
+        },
+      };
+
+      setUser(profileData);
+
+      setEditForm({
+        displayName: profileData.displayName,
+        bio: profileData.bio,
+        location: profileData.location,
+      });
+    }
+  }, [authUser]);
+
+  if (loading) {
+    return <div className="profile-page">Loading profile...</div>;
+  }
+
+  if (!user) {
+    return (
+      <div className="profile-page">
+        <Header />
+        <main className="profile-main">
+          <div className="empty-state">
+            Please log in to view your profile.
+            <br />
+            <Link to="/login">Log in</Link>
+          </div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
 
   const handleEditChange = (e) => {
     const { name, value } = e.target;
@@ -90,7 +135,7 @@ export default function Profile() {
   return (
     <div className="profile-page">
       <Header />
-      
+
       <main className="profile-main">
         <section className="profile-header">
           <div className="profile-cover"></div>
@@ -98,23 +143,23 @@ export default function Profile() {
             <div className="profile-avatar-wrapper">
               <img src={user.avatarUrl} alt={user.displayName} className="profile-avatar" />
             </div>
-            
+
             <div className="profile-details">
               <div className="profile-title-row">
                 <div>
                   <h1 className="profile-name">{user.displayName}</h1>
                   <span className="profile-username">{user.username}</span>
                 </div>
-                <button 
+                <button
                   className="btn-edit-profile"
                   onClick={() => setIsEditModalOpen(true)}
                 >
                   Edit Profile
                 </button>
               </div>
-              
+
               <p className="profile-bio">{user.bio}</p>
-              
+
               <div className="profile-meta">
                 <span className="meta-item">
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" width="16" height="16"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0 1 18 0z"></path><circle cx="12" cy="10" r="3"></circle></svg>
@@ -125,7 +170,7 @@ export default function Profile() {
                   Joined {user.joined}
                 </span>
               </div>
-              
+
               <div className="profile-stats">
                 <div className="stat-box">
                   <span className="stat-value">{user.stats.reviews}</span>
@@ -157,7 +202,7 @@ export default function Profile() {
                 <button className={`tab-btn ${activeTab === 'ratings' ? 'active' : ''}`} onClick={() => setActiveTab('ratings')}>Ratings</button>
                 <button className={`tab-btn ${activeTab === 'collections' ? 'active' : ''}`} onClick={() => setActiveTab('collections')}>Collections</button>
               </div>
-              
+
               <div className="tab-content">
                 {activeTab === 'watchlist' && (
                   <div className="grid-view">
@@ -253,29 +298,29 @@ export default function Profile() {
             <form onSubmit={handleSaveProfile} className="edit-form">
               <div className="form-group">
                 <label>Display Name</label>
-                <input 
-                  type="text" 
-                  name="displayName" 
-                  value={editForm.displayName} 
+                <input
+                  type="text"
+                  name="displayName"
+                  value={editForm.displayName}
                   onChange={handleEditChange}
-                  required 
+                  required
                 />
               </div>
               <div className="form-group">
                 <label>Location</label>
-                <input 
-                  type="text" 
-                  name="location" 
-                  value={editForm.location} 
-                  onChange={handleEditChange} 
+                <input
+                  type="text"
+                  name="location"
+                  value={editForm.location}
+                  onChange={handleEditChange}
                 />
               </div>
               <div className="form-group">
                 <label>Bio</label>
-                <textarea 
-                  name="bio" 
-                  value={editForm.bio} 
-                  onChange={handleEditChange} 
+                <textarea
+                  name="bio"
+                  value={editForm.bio}
+                  onChange={handleEditChange}
                   rows="4"
                 ></textarea>
               </div>

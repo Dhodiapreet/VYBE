@@ -24,12 +24,11 @@ export default function SignUp() {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const [agreeTerms, setAgreeTerms] = useState(false);
-  
+
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(false);
-  
+
   const navigate = useNavigate();
 
   const handleSignUp = async (e) => {
@@ -42,11 +41,7 @@ export default function SignUp() {
       setError('Passwords do not match.');
       return;
     }
-    if (!agreeTerms) {
-      setError('You must agree to the Terms of Service and Privacy Policy.');
-      return;
-    }
-    
+
     setError(null);
     setLoading(true);
 
@@ -68,18 +63,18 @@ export default function SignUp() {
       <div className="auth-panel">
         <div className="auth-panel-content">
           <Link to="/home" className="auth-panel-logo">VYBE</Link>
-          <h1 className="auth-panel-quote">JOIN THE<br/>REVOLUTION.</h1>
+          <h1 className="auth-panel-quote">JOIN THE<br />REVOLUTION.</h1>
           <p className="auth-panel-sub">Create an account to track your watchlist, share reviews, and connect with other cinephiles.</p>
         </div>
       </div>
-      
+
       <div className="auth-content">
         <Link to="/home" className="auth-mobile-logo">VYBE</Link>
-        
+
         <div className="auth-form-container">
           <h2 className="auth-title">Create an account</h2>
           <p className="auth-subtitle">Join VYBE and start your journey.</p>
-          
+
           {error && (
             <div className="auth-alert error">
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
@@ -105,11 +100,11 @@ export default function SignUp() {
             <div className="form-group">
               <label className="form-label" htmlFor="name">Username</label>
               <div className="input-wrapper">
-                <input 
-                  type="text" 
-                  id="name" 
-                  className="form-input" 
-                  placeholder="Enter a username" 
+                <input
+                  type="text"
+                  id="name"
+                  className="form-input"
+                  placeholder="Enter a username"
                   value={name}
                   onChange={(e) => setName(e.target.value)}
                   disabled={loading || success}
@@ -120,33 +115,33 @@ export default function SignUp() {
             <div className="form-group">
               <label className="form-label" htmlFor="email">Email</label>
               <div className="input-wrapper">
-                <input 
-                  type="email" 
-                  id="email" 
-                  className="form-input" 
-                  placeholder="Enter your email" 
+                <input
+                  type="email"
+                  id="email"
+                  className="form-input"
+                  placeholder="Enter your email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   disabled={loading || success}
                 />
               </div>
             </div>
-            
+
             <div className="form-group">
               <label className="form-label" htmlFor="password">Password</label>
               <div className="input-wrapper">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  id="password" 
-                  className="form-input" 
-                  placeholder="Create a password" 
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="password"
+                  className="form-input"
+                  placeholder="Create a password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                   disabled={loading || success}
                 />
-                <button 
-                  type="button" 
-                  className="btn-toggle-password" 
+                <button
+                  type="button"
+                  className="btn-toggle-password"
                   onClick={() => setShowPassword(!showPassword)}
                   aria-label={showPassword ? "Hide password" : "Show password"}
                   disabled={loading || success}
@@ -159,38 +154,27 @@ export default function SignUp() {
             <div className="form-group">
               <label className="form-label" htmlFor="confirmPassword">Confirm Password</label>
               <div className="input-wrapper">
-                <input 
-                  type={showPassword ? "text" : "password"} 
-                  id="confirmPassword" 
-                  className="form-input" 
-                  placeholder="Confirm your password" 
+                <input
+                  type={showPassword ? "text" : "password"}
+                  id="confirmPassword"
+                  className="form-input"
+                  placeholder="Confirm your password"
                   value={confirmPassword}
                   onChange={(e) => setConfirmPassword(e.target.value)}
                   disabled={loading || success}
                 />
               </div>
             </div>
-            
-            <div className="auth-options">
-              <label className="checkbox-label" style={{ fontSize: '0.875rem' }}>
-                <input 
-                  type="checkbox" 
-                  className="checkbox-input"
-                  checked={agreeTerms}
-                  onChange={(e) => setAgreeTerms(e.target.checked)}
-                  disabled={loading || success}
-                />
-                <span>I agree to the <a href="#terms" className="forgot-link" onClick={(e) => e.preventDefault()}>Terms</a> and <a href="#privacy" className="forgot-link" onClick={(e) => e.preventDefault()}>Privacy Policy</a></span>
-              </label>
-            </div>
-            
+
+
+
             <button type="submit" className="btn-submit" disabled={loading || success}>
               {loading ? <div className="loader"></div> : 'Create Account'}
             </button>
           </form>
-          
+
           <div className="auth-redirect">
-            Already have an account? 
+            Already have an account?
             <Link to="/login">Log in</Link>
           </div>
         </div>
