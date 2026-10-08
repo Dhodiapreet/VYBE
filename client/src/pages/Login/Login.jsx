@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../contexts/AuthContext';
 import './Login.css';
 
@@ -28,6 +28,8 @@ export default function Login() {
   const [success, setSuccess] = useState(false);
   
   const navigate = useNavigate();
+  const location = useLocation();
+  const redirectTo = location.state?.from || '/home';
 
   const handleLogin = async (e) => {
     e.preventDefault();
@@ -42,7 +44,7 @@ export default function Login() {
     try {
       await login(email, password);
       setSuccess(true);
-      setTimeout(() => navigate('/home'), 1000);
+      setTimeout(() => navigate(redirectTo, { replace: true }), 1000);
     } catch (err) {
       setError(err.message || 'Login failed. Please check your credentials.');
     } finally {

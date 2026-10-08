@@ -15,6 +15,7 @@ export default function Movies() {
   const [selectedSort, setSelectedSort] = useState('Popularity');
   
   const [allMovies, setAllMovies] = useState([]);
+  const [baseMovies, setBaseMovies] = useState([]);
   const [displayedMovies, setDisplayedMovies] = useState([]);
   const [loading, setLoading] = useState(true);
   const [loadedCount, setLoadedCount] = useState(8);
@@ -34,6 +35,7 @@ export default function Movies() {
         if (res && res.data) {
           // data.results for TMDB response, fallback to data if it's an array directly
           const moviesArray = res.data.results ? res.data.results : (Array.isArray(res.data) ? res.data : []);
+          setBaseMovies(moviesArray);
           setAllMovies(moviesArray);
         }
       } catch (err) {
@@ -44,6 +46,42 @@ export default function Movies() {
     };
     fetchMovies();
   }, []);
+
+  // Search the full TMDB catalog instead of filtering only the currently loaded trending titles.
+  useEffect(() => {
+    const query = searchQuery.trim();
+
+    if (!query) {
+      setAllMovies(baseMovies);
+      return;
+    }
+
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      try {
+        setLoading(true);
+        const res = await apiRequest('/movies/tmdb/search?q=' + encodeURIComponent(query));
+        const results = res?.data?.results || [];
+        if (!cancelled) {
+          setAllMovies(results);
+        }
+      } catch (err) {
+        console.error('Movie search error:', err);
+        if (!cancelled) {
+          setAllMovies([]);
+        }
+      } finally {
+        if (!cancelled) {
+          setLoading(false);
+        }
+      }
+    }, 450);
+
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [searchQuery, baseMovies]);
 
   // Apply filters
   useEffect(() => {

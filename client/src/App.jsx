@@ -1,4 +1,5 @@
-import { Navigate, Route, Routes } from 'react-router-dom';
+import { Navigate, Route, Routes, useLocation } from 'react-router-dom';
+import { useAuth } from './contexts/AuthContext';
 import Home from './pages/Home/Home';
 import Movies from './pages/Movies/Movies';
 import Series from './pages/Series/Series';
@@ -19,6 +20,27 @@ import Messages from './pages/Messages/Messages';
 import Search from './pages/Search/Search';
 import PersonDetails from './pages/PersonDetails/PersonDetails';
 
+function ProtectedContentRoute({ children }) {
+  const { user, loading } = useAuth();
+  const location = useLocation();
+
+  if (loading) {
+    return <div style={{ minHeight: '100vh', background: '#050505' }} />;
+  }
+
+  if (!user) {
+    return (
+      <Navigate
+        to="/login"
+        replace
+        state={{ from: location.pathname + location.search }}
+      />
+    );
+  }
+
+  return children;
+}
+
 export default function App() {
   return (
     <Routes>
@@ -27,10 +49,38 @@ export default function App() {
       <Route path="/feed" element={<Feed />} />
       <Route path="/movies" element={<Movies />} />
       <Route path="/series" element={<Series />} />
-      <Route path="/series/:id" element={<SeriesDetails />} />
-      <Route path="/movies/tmdb/:tmdbId" element={<MovieDetails />} />
-      <Route path="/movies/:id" element={<MovieDetails />} />
-      <Route path="/movies/:id/discussions" element={<MovieDiscussions />} />
+      <Route
+        path="/series/:id"
+        element={(
+          <ProtectedContentRoute>
+            <SeriesDetails />
+          </ProtectedContentRoute>
+        )}
+      />
+      <Route
+        path="/movies/tmdb/:tmdbId"
+        element={(
+          <ProtectedContentRoute>
+            <MovieDetails />
+          </ProtectedContentRoute>
+        )}
+      />
+      <Route
+        path="/movies/:id"
+        element={(
+          <ProtectedContentRoute>
+            <MovieDetails />
+          </ProtectedContentRoute>
+        )}
+      />
+      <Route
+        path="/movies/:id/discussions"
+        element={(
+          <ProtectedContentRoute>
+            <MovieDiscussions />
+          </ProtectedContentRoute>
+        )}
+      />
       <Route path="/profile" element={<Profile />} />
       <Route path="/people" element={<People />} />
       <Route path="/people/actor/:id" element={<PersonDetails />} />

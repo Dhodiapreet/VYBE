@@ -18,9 +18,11 @@ app.use(cors({
 }));
 
 // Rate limiting
+// Keep the production API protected, but do not let repeated local development
+// page loads exhaust the global API budget and make the catalog unusable.
 const limiter = rateLimit({
-  windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // limit each IP to 100 requests per windowMs
+  windowMs: 15 * 60 * 1000,
+  max: process.env.NODE_ENV === 'production' ? 100 : 1000,
   standardHeaders: true,
   legacyHeaders: false,
 });
