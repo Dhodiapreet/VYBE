@@ -1,12 +1,56 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import Header from '../../components/Header/Header';
-import Hero from '../../components/Hero/Hero';
-import MovieSection from '../../components/MovieSection/MovieSection';
-import PickOfTheWeek from '../../components/PickOfTheWeek/PickOfTheWeek';
-import CommunityTeaser from '../../components/CommunityTeaser/CommunityTeaser';
 import Footer from '../../components/Footer/Footer';
+import MoctaleMediaCard from '../../components/MoctaleMediaCard';
 import { apiRequest } from '../../services/api';
 import './Home.css';
+
+function PromoCard({ title, text }) {
+  return (
+    <div className="moctale-promo-card">
+      <div className="moctale-promo-lines">
+        <span />
+        <span />
+        <span />
+        <span />
+        <span />
+      </div>
+      <div>
+        <h3>{title}</h3>
+        <p>{text}</p>
+        <a href="/search" className="moctale-promo-button">Discover now →</a>
+      </div>
+    </div>
+  );
+}
+
+function FeedSection({ title, icon = '✦', items, caption, loading }) {
+  const visible = items.slice(0, 10);
+  return (
+    <section className="moctale-section">
+      <div className="moctale-section-head">
+        <span className="moctale-section-icon" aria-hidden="true">{icon}</span>
+        <h2 className="moctale-section-title">{title}</h2>
+      </div>
+      {loading ? (
+        <div className="loading-state">Loading...</div>
+      ) : (
+        <div className="moctale-home-grid">
+          {visible.slice(0, 5).map((item, index) => (
+            <MoctaleMediaCard key={item._id || item.tmdbId || index} item={item} caption={caption(index)} />
+          ))}
+          {visible.slice(5, 10).map((item, index) => (
+            <MoctaleMediaCard key={item._id || item.tmdbId || index + 5} item={item} caption={caption(index + 5)} />
+          ))}
+          <PromoCard
+            title="Discover Movies & Shows"
+            text="Find your next favourite across theatres and OTT, then build your VYBE."
+          />
+        </div>
+      )}
+    </section>
+  );
+}
 
 export default function Home() {
   const [movieSections, setMovieSections] = useState({
@@ -17,13 +61,14 @@ export default function Home() {
     upcoming: []
   });
   const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
-  const [heroTrailerUrl, setHeroTrailerUrl] = useState(null);
+  const [error, setError] = useState('');
 
   useEffect(() => {
+    let cancelled = false;
     const fetchMovies = async () => {
       try {
         setLoading(true);
+        setError('');
         const endpoints = {
           trending: '/movies/tmdb/trending',
           popular: '/movies/tmdb/popular',
@@ -35,108 +80,94 @@ export default function Home() {
         const entries = await Promise.all(
           Object.entries(endpoints).map(async ([key, endpoint]) => {
             const response = await apiRequest(endpoint);
-            const results = response?.data?.results || [];
-            return [key, results];
+            return [key, response?.data?.results || []];
           })
         );
 
-        setMovieSections(Object.fromEntries(entries));
+        if (!cancelled) {
+          setMovieSections(Object.fromEntries(entries));
+        }
       } catch (err) {
-        console.error('Error fetching TMDB movies:', err);
-        setError(err.message);
+        if (!cancelled) setError(err.message || 'Unable to load titles');
       } finally {
-        setLoading(false);
+        if (!cancelled) setLoading(false);
       }
     };
 
     fetchMovies();
+    return () => { cancelled = true; };
   }, []);
 
-  const heroMovie = movieSections.trending[0] || movieSections.popular[0] || null;
-
-  useEffect(() => {
-    let cancelled = false;
-    const fetchHeroTrailer = async () => {
-      if (!heroMovie?._id) {
-        setHeroTrailerUrl(null);
-        return;
-      }
-
-      try {
-        const response = await apiRequest(`/movies/${heroMovie._id}`);
-        if (!cancelled) {
-          setHeroTrailerUrl(response?.data?.trailerUrl || null);
-        }
-      } catch (err) {
-        console.warn('Could not load hero trailer:', err.message);
-        if (!cancelled) setHeroTrailerUrl(null);
-      }
-    };
-
-    fetchHeroTrailer();
-    return () => {
-      cancelled = true;
-    };
-  }, [heroMovie?._id]);
-
-  const topRatedMovies = movieSections.topRated;
-  const powMain = topRatedMovies[0] || movieSections.trending[0] || null;
-  const powSupport = topRatedMovies.slice(1, 5);
+  const captions = useMemo(() => ({
+    trending: index => index < 2 ? 'New Movie' : index === 2 ? 'Trailer' : 'New Movie',
+    popular: index => index < 2 ? 'Movie • 2026' : 'Movie',
+    topRated: index => 'Movie • Top Rated',
+    nowPlaying: index => 'Now Playing',
+    upcoming: index => 'Upcoming'
+  }), []);
 
   return (
-    <div className="home-page">
+    <div className="home-page moctale-home">
       <Header />
-
       <main>
-        <Hero featuredMovie={heroMovie} trailerUrl={heroTrailerUrl} />
+        {error && <div className="home-error">{error}</div>}
 
-        <div className="content-sections">
-          <MovieSection
-            title="TRENDING THIS WEEK"
-            movies={movieSections.trending}
-            loading={loading}
-            error={error}
-          />
+        <section className="moctale-section moctale-talk-section">
+          <div className="moctale-section-head">
+            <span className="moctale-section-icon" aria-hidden="true">📣</span>
+            <h1 className="moctale-section-title">Talk Of The Town</h1>
+          </div>
 
-          <MovieSection
-            title="POPULAR MOVIES"
-            movies={movieSections.popular}
-            loading={loading}
-            error={error}
-          />
-
-          {!loading && !error && powMain && (
-            <PickOfTheWeek
-              mainMovie={powMain}
-              supportingMovies={powSupport}
-            />
+          {loading ? (
+            <div className="loading-state">Loading...</div>
+          ) : (
+            <div className="moctale-home-grid">
+              {movieSections.trending.slice(0, 10).map((item, index) => (
+                <MoctaleMediaCard
+                  key={item._id || item.tmdbId || index}
+                  item={item}
+                  caption={captions.trending(index)}
+                />
+              ))}
+              <PromoCard
+                title="Discover Movies & Shows"
+                text="Your next watch is waiting. Explore what's trending across the VYBE universe."
+              />
+            </div>
           )}
+        </section>
 
-          <MovieSection
-            title="TOP RATED"
-            movies={movieSections.topRated}
+        <div className="moctale-home-section-dark">
+          <FeedSection
+            title="Watch It With District"
+            icon="✦"
+            items={movieSections.popular}
+            caption={(index) => index === 0 ? 'Movie • 2026' : 'Movie'}
             loading={loading}
-            error={error}
           />
-
-          <MovieSection
-            title="NOW PLAYING"
-            movies={movieSections.nowPlaying}
+          <FeedSection
+            title="Editor's Pick Of The Week"
+            icon="✦"
+            items={movieSections.topRated}
+            caption={() => 'Movie'}
             loading={loading}
-            error={error}
           />
-
-          <CommunityTeaser />
-
-          <MovieSection
-            title="UPCOMING"
-            movies={movieSections.upcoming}
+          <FeedSection
+            title="Don't Miss These"
+            icon="✦"
+            items={movieSections.nowPlaying}
+            caption={() => 'Movie'}
             loading={loading}
-            error={error}
+          />
+          <FeedSection
+            title="Coming Soon"
+            icon="✦"
+            items={movieSections.upcoming}
+            caption={() => 'Upcoming'}
+            loading={loading}
           />
         </div>
       </main>
-
       <Footer />
     </div>
   );

@@ -59,7 +59,7 @@ export default function SignUp() {
 
 
   return (
-    <div className="auth-page">
+    <div className="auth-page moctale-auth-page">
       <div className="auth-panel">
         <div className="auth-panel-content">
           <Link to="/home" className="auth-panel-logo">VYBE</Link>

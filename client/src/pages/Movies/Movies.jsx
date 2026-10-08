@@ -123,7 +123,7 @@ export default function Movies() {
   };
 
   return (
-    <div className="movies-page">
+    <div className="movies-page moctale-catalog-page">
       <Header />
       
       <main className="movies-main">

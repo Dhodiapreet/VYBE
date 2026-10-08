@@ -141,7 +141,7 @@ export default function MovieDetails() {
 
   if (loading) {
     return (
-      <div className="movie-details-page">
+      <div className="movie-details-page moctale-detail-page">
         <Header />
         <main className="loading-container">
           <div className="spinner"></div>
@@ -154,7 +154,7 @@ export default function MovieDetails() {
 
   if (!movie) {
     return (
-      <div className="movie-details-page">
+      <div className="movie-details-page moctale-detail-page">
         <Header />
         <main className="not-found-container">
           <h2>Movie Not Found</h2>
@@ -257,7 +257,7 @@ export default function MovieDetails() {
   const currentUserReview = reviews.find(r => r.username === currentUserUsername);
 
   return (
-    <div className="movie-details-page">
+    <div className="movie-details-page moctale-detail-page">
       <Header />
 
       <main className="movie-details-main">

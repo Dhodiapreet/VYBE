@@ -156,12 +156,12 @@ export default function SeriesDetails() {
   };
 
   if (loading) {
-    return <div className="series-details-page"><Header /><main className="series-details-state">Loading series details...</main><Footer /></div>;
+    return <div className="series-details-page moctale-detail-page"><Header /><main className="series-details-state">Loading series details...</main><Footer /></div>;
   }
 
   if (!series) {
     return (
-      <div className="series-details-page">
+      <div className="series-details-page moctale-detail-page">
         <Header />
         <main className="series-details-state">
           <h2>Series Not Found</h2>
@@ -187,7 +187,7 @@ export default function SeriesDetails() {
   const trailerId = getYouTubeId(series.trailerUrl);
 
   return (
-    <div className="series-details-page">
+    <div className="series-details-page moctale-detail-page">
       <Header />
       <main className="series-details-main">
         <section className={`series-hero ${trailerId ? 'has-hero-trailer' : ''}`} style={{ backgroundImage: `url(${series.backdropUrl || series.posterUrl})` }}>

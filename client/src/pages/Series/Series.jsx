@@ -36,7 +36,7 @@ export default function Series() {
   useEffect(() => { loadSeries(); }, []);
 
   return (
-    <div className="series-page">
+    <div className="series-page moctale-catalog-page">
       <Header />
       <main className="series-main">
         <section className="series-intro">

@@ -1,0 +1,66 @@
+:root{--moctale-bg:#050505;--moctale-panel:#0b0b0b;--moctale-panel-2:#101010;--moctale-border:#1d1d1d;--moctale-text:#f7f7f7;--moctale-muted:#969696;--moctale-purple:#7b18f7;--moctale-purple-2:#9b3cff}
+body{background:#050505!important;color:var(--moctale-text)!important;font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif!important}
+html,body,#root{min-height:100%}button,input,select,textarea{font:inherit}
+.moctale-home{min-height:100vh;background:radial-gradient(circle at 14% 16%,rgba(122,31,142,.22),transparent 34%),radial-gradient(circle at 64% 18%,rgba(14,60,57,.20),transparent 38%),linear-gradient(180deg,#120b13 0,#070707 42%,#050505 100%)}
+.moctale-section{width:min(1240px,100%);margin:0 auto;padding:34px 24px 46px}.moctale-section-head{display:flex;align-items:center;gap:10px;margin-bottom:24px}.moctale-section-icon{font-size:30px;line-height:1}.moctale-section-title{margin:0;color:#f6f6f6;font-size:25px;line-height:1.1;font-weight:800;letter-spacing:-.03em}
+.moctale-home-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr)) minmax(220px,1.55fr);gap:28px;align-items:start}.moctale-home-card{min-width:0;text-decoration:none}.moctale-home-poster{position:relative;aspect-ratio:2/3;overflow:hidden;border-radius:8px;background:#151515;border:1px solid rgba(255,255,255,.05);box-shadow:0 10px 28px rgba(0,0,0,.25)}.moctale-home-poster img{width:100%;height:100%;display:block;object-fit:cover;transition:transform .28s ease,filter .28s ease}.moctale-home-card:hover .moctale-home-poster{box-shadow:0 16px 34px rgba(0,0,0,.42);border-color:rgba(155,60,255,.24)}.moctale-home-card:hover .moctale-home-poster img{transform:scale(1.035);filter:brightness(1.04)}
+.moctale-home-copy{padding-top:10px}.moctale-home-name{margin:0;color:#d9d9d9;font-size:15px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.moctale-home-caption{margin:4px 0 0;color:#777;font-size:12px;line-height:1.25}
+.moctale-promo-card{grid-column:6;grid-row:1/span 2;min-height:100%;border-radius:10px;overflow:hidden;background:radial-gradient(circle at 15% 10%,rgba(255,255,255,.25),transparent 25%),linear-gradient(145deg,#6c14d7,#2a085c 72%);box-shadow:0 18px 42px rgba(0,0,0,.32);display:flex;flex-direction:column;justify-content:space-between;padding:18px}.moctale-promo-lines{display:flex;gap:6px}.moctale-promo-lines span{height:4px;flex:1;border-radius:999px;background:rgba(255,255,255,.30)}.moctale-promo-lines span:first-child{background:#fff}.moctale-promo-card h3{max-width:280px;margin:auto 0 12px;color:#fff;font-size:28px;line-height:1.04;letter-spacing:-.045em}.moctale-promo-card p{max-width:260px;margin:0;color:rgba(255,255,255,.76);font-size:13px;line-height:1.45}.moctale-promo-button{margin-top:22px;align-self:flex-start;padding:10px 14px;border-radius:999px;background:rgba(0,0,0,.25);border:1px solid rgba(255,255,255,.20);color:#fff;text-decoration:none;font-size:12px;font-weight:800;transition:transform .2s ease,background .2s ease}.moctale-promo-button:hover{transform:translateY(-2px);background:rgba(0,0,0,.40)}
+.moctale-home .movie-section,.moctale-home .pick-of-the-week,.moctale-home .community-teaser{display:none}.moctale-home .loading-state{min-height:200px;color:#777}.moctale-home .home-error{padding:30px 24px;color:#ff8da8;text-align:center}
+@media(max-width:1120px){.moctale-home-grid{grid-template-columns:repeat(4,minmax(0,1fr)) minmax(210px,1.45fr)}.moctale-promo-card{grid-column:5}}@media(max-width:820px){.moctale-section{padding-inline:18px}.moctale-home-grid{grid-template-columns:repeat(3,minmax(0,1fr));gap:22px 16px}.moctale-promo-card{grid-column:1/-1;grid-row:auto;min-height:210px}}@media(max-width:560px){.moctale-section-title{font-size:21px}.moctale-home-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.moctale-promo-card{min-height:180px}}
+.moctale-catalog-page,.moctale-catalog-page .movies-main,.moctale-catalog-page .series-main{background:#050505!important}.moctale-catalog-page .movies-intro,.moctale-catalog-page .series-intro{padding-top:48px;text-align:left}.moctale-catalog-page .movies-intro-content,.moctale-catalog-page .series-intro>div:first-child{margin-left:0;margin-right:0}.moctale-catalog-page .movies-intro-content h1,.moctale-catalog-page .series-intro h1{color:#fff;font-size:clamp(3rem,6vw,5rem);letter-spacing:-.055em}.moctale-catalog-page .movies-intro-content p,.moctale-catalog-page .series-intro>p:not(.series-eyebrow){color:#8d8d8d}.moctale-catalog-page .movies-search-input,.moctale-catalog-page .series-search input{background:#0d0d0d;border:1px solid #242424;border-radius:999px;color:#fff}.moctale-catalog-page .movies-search-input:focus,.moctale-catalog-page .series-search input:focus{border-color:var(--moctale-purple);box-shadow:0 0 0 3px rgba(123,24,247,.12)}.moctale-catalog-page .btn-primary{background:var(--moctale-purple)!important;border-color:var(--moctale-purple)!important;color:#fff!important;border-radius:999px!important}.moctale-catalog-page .discovery-filter-bar{background:#070707;border-top:1px solid #151515;border-bottom:1px solid #151515}.moctale-catalog-page .filter-group select{background:#101010;border-color:#252525;border-radius:999px}.moctale-catalog-page .movies-grid,.moctale-catalog-page .series-grid{gap:24px}.moctale-catalog-page .movie-poster-wrapper,.moctale-catalog-page .series-poster-wrapper{border-radius:8px;box-shadow:0 10px 26px rgba(0,0,0,.24)}
+.moctale-detail-page{min-height:100vh;background:#050505!important}.moctale-detail-page .movie-details-main,.moctale-detail-page .series-details-main{background:#050505!important}.moctale-detail-page .movie-hero,.moctale-detail-page .series-hero{min-height:680px;background-position:center;overflow:hidden;isolation:isolate}.moctale-detail-page .hero-trailer-media{position:absolute;inset:0;z-index:0;pointer-events:none}.moctale-detail-page .hero-trailer-iframe{width:100%;height:100%;min-width:0!important;min-height:0!important;transform:scale(1.16);pointer-events:none}
+.moctale-detail-page .hero-overlay,.moctale-detail-page .series-hero-overlay{position:relative;z-index:2;min-height:680px;padding:0 7% 76px;justify-content:flex-end;background:linear-gradient(180deg,rgba(0,0,0,.06) 34%,rgba(5,5,5,.24) 55%,#050505 96%),linear-gradient(0deg,rgba(5,5,5,.98) 0%,transparent 54%)}.moctale-detail-page .breadcrumbs,.moctale-detail-page .series-breadcrumbs{display:none}.moctale-detail-page .hero-content,.moctale-detail-page .series-hero-content{max-width:1240px;margin:0 auto;width:100%;display:grid;grid-template-columns:250px minmax(0,1fr);gap:32px;align-items:end}.moctale-detail-page .hero-poster-container,.moctale-detail-page .series-hero-poster{display:block;width:250px;align-self:end}.moctale-detail-page .hero-poster,.moctale-detail-page .series-hero-poster img{display:block;width:100%;border-radius:9px;box-shadow:0 25px 55px rgba(0,0,0,.55)}.moctale-detail-page .movie-title-large,.moctale-detail-page .series-hero-info h1{font-size:clamp(2.8rem,6vw,5.4rem);letter-spacing:-.055em;line-height:.96}.moctale-detail-page .movie-description,.moctale-detail-page .series-overview{max-width:760px;color:#d2d2d2;font-size:15px;line-height:1.7}.moctale-detail-page .action-btn,.moctale-detail-page .series-hero-actions>*{min-height:44px;border-radius:999px!important}.moctale-detail-page .btn-primary{background:var(--moctale-purple)!important}.moctale-detail-page .btn-secondary,.moctale-detail-page .btn-outline{background:rgba(255,255,255,.08)!important;border:1px solid rgba(255,255,255,.13)!important}.moctale-detail-page .people-section,.moctale-detail-page .movie-facts-section,.moctale-detail-page .series-content-section,.moctale-detail-page .vibe-section,.moctale-detail-page .production-section,.moctale-detail-page .similar-movies-section,.moctale-detail-page .social-context-section{max-width:1240px}.moctale-detail-page .production-card,.moctale-detail-page .vibe-meter,.moctale-detail-page .vibe-chart-card,.moctale-detail-page .tmdb-review-card,.moctale-detail-page .series-review-grid article{background:#0a0a0a;border-color:#1c1c1c;border-radius:10px}.moctale-detail-page .movie-facts-grid{border-color:#1c1c1c;background:#1c1c1c}.moctale-detail-page .movie-facts-grid>div{background:#0a0a0a}.moctale-detail-page .watch-provider-card{background:#0a0a0a;border-color:#1c1c1c}
+.moctale-auth-page{min-height:100vh;display:grid;grid-template-columns:1.02fr .98fr;background:#050505;color:#111}.moctale-auth-page .auth-panel{position:relative;display:block;min-height:100vh;overflow:hidden;border:0;background:#050505}.moctale-auth-page .auth-panel::before{content:'';position:absolute;inset:0;background:linear-gradient(180deg,rgba(5,5,5,.02) 44%,rgba(5,5,5,.92) 100%),radial-gradient(circle at center,transparent 44%,rgba(0,0,0,.26) 100%);z-index:5;pointer-events:none}.moctale-auth-page .auth-panel::after{content:'';position:absolute;inset:0;z-index:0;background-image:url('https://image.tmdb.org/t/p/w500/uDO8zWDhfWwoFdKS4fzkUJt0Rf0.jpg'),url('https://image.tmdb.org/t/p/w500/gEU2QniE6E77NI6lCU6MxlNBvIx.jpg'),url('https://image.tmdb.org/t/p/w500/qJ2tW6WMUDux911r6m7haRef0WH.jpg'),url('https://image.tmdb.org/t/p/w500/7IiTTgloJzvGI1TAYymCfbfl3vT.jpg'),url('https://image.tmdb.org/t/p/w500/oYuLEt3zVCKq57qu2F8dT7NIa6f.jpg'),url('https://image.tmdb.org/t/p/w500/pB8BM7pdSp6B6Ih7QZ4WmEwnv6r.jpg');background-size:24% 43%,24% 43%,24% 43%,24% 43%,24% 43%,24% 43%;background-position:2% -2%,28% 8%,54% -4%,80% 4%,12% 48%,55% 51%;background-repeat:no-repeat;transform:scale(1.25);filter:saturate(.95) brightness(.92)}.moctale-auth-page .auth-panel-content{display:none}.moctale-auth-page .auth-content{position:relative;z-index:10;justify-content:center;padding:62px 44px;background:#050505}.moctale-auth-page .auth-mobile-logo{display:block;margin:0 0 28px;font-size:22px;font-weight:900;letter-spacing:.08em;color:#fff;background:none;-webkit-text-fill-color:unset}.moctale-auth-page .auth-form-container{max-width:490px;margin:0 auto}.moctale-auth-page .auth-title{color:#fff;font-size:23px;font-weight:800}.moctale-auth-page .auth-subtitle{color:#999}.moctale-auth-page .auth-form{gap:18px;padding:30px;border-radius:10px;background:#fff}.moctale-auth-page .auth-form .form-label{color:#111;font-size:14px;font-weight:500}.moctale-auth-page .form-input{height:46px;background:#fff;border:1px solid #cfcfcf;border-radius:7px;color:#111;padding:0 14px;box-shadow:none}.moctale-auth-page .form-input:focus{border-color:#b3b3b3;background:#fff;box-shadow:0 0 0 2px rgba(123,24,247,.10)}.moctale-auth-page .form-input::placeholder{color:#9b9b9b}.moctale-auth-page .forgot-link,.moctale-auth-page .auth-redirect a{color:var(--moctale-purple)}.moctale-auth-page .btn-submit{min-height:54px;border-radius:999px;background:var(--moctale-purple);color:#fff}.moctale-auth-page .auth-redirect{color:#fff;margin-top:18px}.moctale-auth-page .auth-alert.error{color:#b00020;background:#fff0f2;border-color:#ffd6de}.moctale-auth-page .auth-alert.success{color:#198754;background:#f0fff5;border-color:#c7f5d6}
+@media(max-width:880px){.moctale-auth-page{grid-template-columns:1fr}.moctale-auth-page .auth-panel{display:none}.moctale-auth-page .auth-content{min-height:100vh;padding:28px 18px}.moctale-auth-page .auth-form{padding:24px}}@media(min-width:881px){.moctale-auth-page .auth-mobile-logo{position:absolute;top:42px;right:44px;margin:0}}
+/* Pixel-oriented desktop proportions from the reference layout. */
+@media (min-width: 1250px) {
+  .moctale-section {
+    width: 100%;
+    max-width: 1290px;
+    padding-left: 0;
+    padding-right: 0;
+  }
+
+  .moctale-home-grid {
+    grid-template-columns: repeat(5, 160px) 284px;
+    gap: 30px;
+  }
+
+  .moctale-media-card {
+    width: 160px;
+  }
+}
+
+.moctale-talk-section {
+  padding-top: 42px;
+  padding-bottom: 54px;
+}
+
+.moctale-talk-section .moctale-section-head {
+  margin-left: 0;
+}
+
+.moctale-home-section-dark {
+  background: #050505;
+}
+
+.moctale-home-section-dark .moctale-section {
+  padding-top: 44px;
+}
+
+.moctale-home-grid > .moctale-promo-card {
+  width: 100%;
+}
+
+@media (max-width: 1249px) and (min-width: 821px) {
+  .moctale-home-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+
+  .moctale-promo-card {
+    grid-column: 1 / -1;
+    grid-row: auto;
+    min-height: 220px;
+  }
+}

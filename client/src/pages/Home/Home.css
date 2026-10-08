@@ -1,20 +1,5 @@
-.home-page {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
 
-.content-sections {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-  padding-bottom: 64px;
-  margin-top: -60px; /* Overlap with hero */
-  z-index: 10;
-  position: relative;
-}
-
-/* Ensure smooth scrolling across the page */
-html {
-  scroll-behavior: smooth;
-}
+.home-page.moctale-home .moctale-home-section-dark{background:#050505}
+.moctale-talk-section{padding-top:42px;padding-bottom:54px}
+.moctale-talk-section .moctale-section-title{font-size:28px}
+@media(min-width:821px){.moctale-talk-section{min-height:760px}}
