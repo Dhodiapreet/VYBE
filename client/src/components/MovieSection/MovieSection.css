@@ -137,3 +137,38 @@
     gap: 16px;
   }
 }
+
+/* Home horizontal rows: compact card sizing, matching the Series visual scale */
+.movie-row .movie-card {
+  flex: 0 0 182px;
+  width: 182px;
+}
+
+.movie-row {
+  gap: 18px;
+}
+
+.movie-row-container {
+  margin-left: -5%;
+  margin-right: -5%;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+@media (max-width: 1180px) {
+  .movie-row .movie-card {
+    flex-basis: 170px;
+    width: 170px;
+  }
+}
+
+@media (max-width: 720px) {
+  .movie-row .movie-card {
+    flex-basis: 150px;
+    width: 150px;
+  }
+
+  .movie-row {
+    gap: 14px;
+  }
+}

@@ -2,7 +2,7 @@ const mongoose = require('mongoose');
 
 const ratingSchema = new mongoose.Schema({
   user: { type: mongoose.Schema.Types.ObjectId, ref: 'User', required: true },
-  onModel: { type: String, required: true, enum: ['Movie', 'Song', 'Match'] },
+  onModel: { type: String, required: true, enum: ['Movie', 'Series', 'Song', 'Match'] },
   contentId: { type: mongoose.Schema.Types.ObjectId, required: true, refPath: 'onModel' },
   ratingValue: { 
     type: String, 

@@ -52,12 +52,89 @@ exports.getTrendingMovies = async (page = 1) => {
   return fetchFromTMDB('/trending/movie/week', { page });
 };
 
+exports.getPopularMovies = async (page = 1) => {
+  return fetchFromTMDB('/movie/popular', { page });
+};
+
+exports.getTopRatedMovies = async (page = 1) => {
+  return fetchFromTMDB('/movie/top_rated', { page });
+};
+
+exports.getNowPlayingMovies = async (page = 1) => {
+  return fetchFromTMDB('/movie/now_playing', { page });
+};
+
+exports.getUpcomingMovies = async (page = 1) => {
+  return fetchFromTMDB('/movie/upcoming', { page });
+};
+
+exports.getSimilarMovies = async (tmdbId, page = 1) => {
+  return fetchFromTMDB('/movie/' + tmdbId + '/similar', { page });
+};
+
+exports.getTrendingSeries = async (page = 1) => {
+  return fetchFromTMDB('/trending/tv/week', { page });
+};
+
+exports.getPopularSeries = async (page = 1) => {
+  return fetchFromTMDB('/tv/popular', { page });
+};
+
+exports.getTopRatedSeries = async (page = 1) => {
+  return fetchFromTMDB('/tv/top_rated', { page });
+};
+
+exports.getAiringTodaySeries = async (page = 1) => {
+  return fetchFromTMDB('/tv/airing_today', { page });
+};
+
+exports.getOnTheAirSeries = async (page = 1) => {
+  return fetchFromTMDB('/tv/on_the_air', { page });
+};
+
+exports.searchSeries = async (query, page = 1) => {
+  return fetchFromTMDB('/search/tv', { query, page });
+};
+
+exports.getSimilarSeries = async (tmdbId, page = 1) => {
+  return fetchFromTMDB('/tv/' + tmdbId + '/similar', { page });
+};
+
+exports.getSeriesDetails = async (tmdbId) => {
+  return fetchFromTMDB('/tv/' + tmdbId, {
+    append_to_response: 'credits,keywords,reviews,external_ids,videos,content_ratings,watch/providers',
+    language: 'en-US'
+  });
+};
+
+exports.searchPeople = async (query, page = 1) => {
+  return fetchFromTMDB('/search/person', { query, page, include_adult: false });
+};
+
+exports.getPopularPeople = async (page = 1) => {
+  return fetchFromTMDB('/person/popular', { page });
+};
+
+exports.getTrendingPeople = async (page = 1) => {
+  return fetchFromTMDB('/trending/person/week', { page });
+};
+
+exports.getPersonDetails = async (tmdbId) => {
+  return fetchFromTMDB('/person/' + tmdbId, {
+    append_to_response: 'combined_credits,external_ids',
+    language: 'en-US'
+  });
+};
+
 exports.searchMovies = async (query, page = 1) => {
   return fetchFromTMDB('/search/movie', { query, page });
 };
 
 exports.getMovieDetails = async (tmdbId) => {
-  return fetchFromTMDB(`/movie/${tmdbId}`, { append_to_response: 'videos,credits' });
+  return fetchFromTMDB(`/movie/${tmdbId}`, {
+    append_to_response: 'videos,credits,keywords,reviews,external_ids,release_dates,watch/providers',
+    language: 'en-US'
+  });
 };
 
 exports.discoverMovies = async (queryParams = {}) => {

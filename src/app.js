@@ -51,10 +51,14 @@ app.get('/api/v1/health', (req, res) => {
 const authRoutes = require('./modules/auth/auth.routes');
 const movieRoutes = require('./modules/movies/movie.routes');
 const searchRoutes = require('./modules/search/search.routes');
+const seriesRoutes = require('./modules/series/series.routes');
+const peopleRoutes = require('./modules/people/person.routes');
 
 app.use('/api/v1/auth', authRoutes);
 app.use('/api/v1/movies', movieRoutes);
 app.use('/api/v1/search', searchRoutes);
+app.use('/api/v1/series', seriesRoutes);
+app.use('/api/v1/people', peopleRoutes);
 
 const musicRoutes = require('./modules/music/music.routes');
 const sportsRoutes = require('./modules/sports/sports.routes');

@@ -1,141 +1,141 @@
-import React, { useState } from 'react';
-import StarRating from './StarRating';
+import React, { useMemo, useState } from 'react';
 import './ReviewList.css';
 
-export default function ReviewList({ 
-  reviews, 
-  currentUserUsername, 
-  onEditReview, 
+const getVibe = (rating = 0) => {
+  if (rating >= 9) return { label: 'Perfection', className: 'perfection' };
+  if (rating >= 7) return { label: 'Go For It', className: 'go-for-it' };
+  if (rating >= 5) return { label: 'Timepass', className: 'timepass' };
+  return { label: 'Skip', className: 'skip' };
+};
+
+const formatLikes = (count = 0) => {
+  if (count >= 1000000) return `${(count / 1000000).toFixed(1).replace('.0','')}M`;
+  if (count >= 1000) return `${(count / 1000).toFixed(1).replace('.0','')}K`;
+  return String(count);
+};
+
+export default function ReviewList({
+  reviews,
+  currentUserUsername,
+  onEditReview,
   onDeleteReview,
   onToggleLike
 }) {
-  const [sortBy, setSortBy] = useState('recent'); // 'recent', 'highest', 'liked'
-  const [filterSpoilers, setFilterSpoilers] = useState(false);
+  const [sortBy, setSortBy] = useState('liked');
+  const [showSpoilers, setShowSpoilers] = useState(false);
   const [revealedSpoilers, setRevealedSpoilers] = useState({});
+  const [openMenu, setOpenMenu] = useState(null);
 
-  if (!reviews || reviews.length === 0) {
-    return (
-      <div className="reviews-empty-state">
-        <p>No reviews yet. Be the first to share your thoughts!</p>
-      </div>
-    );
-  }
+  const sortedReviews = useMemo(() => {
+    return [...(reviews || [])].sort((a, b) => {
+      if (sortBy === 'highest') return (b.rating || 0) - (a.rating || 0);
+      if (sortBy === 'recent') return new Date(b.date || 0) - new Date(a.date || 0);
+      return (b.likes || 0) - (a.likes || 0);
+    });
+  }, [reviews, sortBy]);
 
-  const toggleSpoiler = (id) => {
-    setRevealedSpoilers(prev => ({
-      ...prev,
-      [id]: !prev[id]
-    }));
-  };
+  const filteredReviews = showSpoilers ? sortedReviews : sortedReviews.filter(review => !review.hasSpoilers);
 
-  const sortedReviews = [...reviews].sort((a, b) => {
-    if (sortBy === 'recent') {
-      return new Date(b.date) - new Date(a.date);
-    } else if (sortBy === 'highest') {
-      return b.rating - a.rating;
-    } else if (sortBy === 'liked') {
-      return b.likes - a.likes;
-    }
-    return 0;
-  });
-
-  const filteredReviews = filterSpoilers 
-    ? sortedReviews.filter(r => !r.hasSpoilers)
-    : sortedReviews;
+  const toggleSpoiler = id => setRevealedSpoilers(prev => ({ ...prev, [id]: !prev[id] }));
 
   return (
     <div className="reviews-container">
-      <div className="reviews-controls">
-        <div className="sort-controls">
-          <label htmlFor="sort-reviews">Sort by:</label>
-          <select 
-            id="sort-reviews"
-            value={sortBy} 
-            onChange={(e) => setSortBy(e.target.value)}
-            className="select-sort"
-          >
-            <option value="recent">Recent</option>
-            <option value="highest">Highest Rated</option>
+      <div className="reviews-heading-row">
+        <h2>User Reviews</h2>
+        <div className="reviews-controls">
+          <label className="review-sort-control">
+          <span className="sort-icon" aria-hidden="true">↕</span>
+          <select value={sortBy} onChange={event => setSortBy(event.target.value)} aria-label="Sort reviews">
             <option value="liked">Most Liked</option>
+            <option value="recent">Most Recent</option>
+            <option value="highest">Highest Rated</option>
           </select>
-        </div>
-        <div className="filter-controls">
-          <label className="checkbox-label">
-            <input 
-              type="checkbox" 
-              checked={filterSpoilers}
-              onChange={(e) => setFilterSpoilers(e.target.checked)}
-            />
-            <span className="custom-checkbox"></span>
-            Hide Spoilers
-          </label>
+          <span className="sort-chevron" aria-hidden="true">⌄</span>
+        </label>
+
+        <label className="review-filter-toggle">
+          <input type="checkbox" checked={showSpoilers} onChange={event => setShowSpoilers(event.target.checked)} />
+          <span className="filter-box" />
+          <span>Show Spoilers</span>
+        </label>
         </div>
       </div>
 
-      <div className="reviews-list">
-        {filteredReviews.length === 0 ? (
-          <p className="no-filtered-results">No reviews match your filters.</p>
-        ) : (
-          filteredReviews.map(review => {
+      {filteredReviews.length === 0 ? (
+        <div className="reviews-empty-state">
+          <p>{reviews?.length ? 'No reviews match your filters.' : 'No reviews yet. Be the first to share your VYBE.'}</p>
+        </div>
+      ) : (
+        <div className="reviews-list">
+          {filteredReviews.map(review => {
             const isCurrentUser = review.username === currentUserUsername;
+            const vibe = getVibe(review.rating);
             const isSpoilerHidden = review.hasSpoilers && !revealedSpoilers[review.id];
-            
+            const avatarImage = review.avatarUrl || review.userAvatarUrl;
+
             return (
-              <div key={review.id} className="review-card">
+              <article key={review.id} className="review-card">
                 <div className="review-header-row">
                   <div className="review-user">
-                    <div className="user-avatar">{review.avatar}</div>
+                    {avatarImage ? (
+                      <img className="user-avatar review-avatar-image" src={avatarImage} alt="" />
+                    ) : (
+                      <div className="user-avatar">{(review.avatar || review.displayName || 'U').charAt(0).toUpperCase()}</div>
+                    )}
                     <div className="user-info">
-                      <span className="user-name">{review.displayName}</span>
-                      <span className="user-username">@{review.username}</span>
+                      <div className="review-author-line">
+                        <span className="user-name">{review.displayName}</span>
+                        {review.verified && <span className="verified-badge" aria-label="Verified user">✓</span>}
+                      </div>
+                      <span className="review-date">{review.date ? new Date(review.date).toLocaleDateString('en-US', { day: 'numeric', month: 'short', year: 'numeric' }) : ''}</span>
                     </div>
                   </div>
-                  <div className="review-meta">
-                    <StarRating value={review.rating} readOnly size="small" />
-                    <span className="review-date">{new Date(review.date).toLocaleDateString()}</span>
-                  </div>
+                  <div className={`review-vibe-badge ${vibe.className}`}>{vibe.label}</div>
                 </div>
 
-                <div className="review-content">
+                <div className={`review-content ${isSpoilerHidden ? 'is-spoiler' : ''}`}>
                   {isSpoilerHidden ? (
-                    <div className="spoiler-warning">
-                      <p>This review contains spoilers.</p>
-                      <button className="btn-outline small" onClick={() => toggleSpoiler(review.id)}>
-                        Reveal Spoilers
-                      </button>
-                    </div>
+                    <button className="spoiler-warning" onClick={() => toggleSpoiler(review.id)} type="button">
+                      <strong>This review contains spoilers.</strong>
+                      <span>Click to reveal</span>
+                    </button>
                   ) : (
                     <p className="review-text">{review.content}</p>
                   )}
                 </div>
 
                 <div className="review-footer">
-                  <button 
-                    className={`btn-like ${review.isLikedByMe ? 'liked' : ''}`}
-                    onClick={() => onToggleLike(review.id)}
-                  >
-                    <svg viewBox="0 0 24 24" fill={review.isLikedByMe ? "currentColor" : "none"} stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" width="16" height="16">
-                      <path d="M14 9V5a3 3 0 0 0-3-3l-4 9v11h11.28a2 2 0 0 0 2-1.7l1.38-9a2 2 0 0 0-2-2.3zM7 22H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3"></path>
-                    </svg>
-                    <span>{review.likes} {review.likes === 1 ? 'Like' : 'Likes'}</span>
-                  </button>
+                  <div className="review-engagement">
+                    <button className={`review-icon-button btn-like ${review.isLikedByMe ? 'liked' : ''}`} onClick={() => onToggleLike(review.id)} aria-label="Like review">
+                      <svg viewBox="0 0 24 24" width="19" height="19" fill={review.isLikedByMe ? 'currentColor' : 'none'} stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"><path d="M7 10v11H4a2 2 0 0 1-2-2v-7a2 2 0 0 1 2-2h3Zm0 11h9.28a2 2 0 0 0 1.97-1.65l1.38-7A2 2 0 0 0 17.67 10H14V5.5A3.5 3.5 0 0 0 10.5 2L7 10v11Z"/></svg>
+                    </button>
+                    <span>{formatLikes(review.likes)}</span>
+                    {review.commentsCount != null && (
+                      <>
+                        <span className="review-comment-icon" aria-hidden="true">◯</span>
+                        <span>{formatLikes(review.commentsCount)}</span>
+                      </>
+                    )}
+                  </div>
 
-                  {isCurrentUser && (
-                    <div className="review-actions">
-                      <button className="btn-action edit" onClick={() => onEditReview(review)}>
-                        Edit
-                      </button>
-                      <button className="btn-action delete" onClick={() => onDeleteReview(review.id)}>
-                        Delete
-                      </button>
+                  {(isCurrentUser || review.hasSpoilers) && (
+                    <div className="review-more-menu">
+                      <button type="button" className="review-more-button" onClick={() => setOpenMenu(openMenu === review.id ? null : review.id)} aria-label="Review options">•••</button>
+                      {openMenu === review.id && (
+                        <div className="review-menu">
+                          {isCurrentUser && <button type="button" onClick={() => { setOpenMenu(null); onEditReview(review); }}>Edit</button>}
+                          {isCurrentUser && <button type="button" className="danger" onClick={() => { setOpenMenu(null); onDeleteReview(review.id); }}>Delete</button>}
+                          {review.hasSpoilers && <button type="button" onClick={() => { setOpenMenu(null); toggleSpoiler(review.id); }}>{revealedSpoilers[review.id] ? 'Hide Spoilers' : 'Reveal Spoilers'}</button>}
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
-              </div>
+              </article>
             );
-          })
-        )}
-      </div>
+          })}
+        </div>
+      )}
     </div>
   );
 }

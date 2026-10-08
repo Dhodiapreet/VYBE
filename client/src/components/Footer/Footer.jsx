@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import './Footer.css';
 
 const CURRENT_YEAR = new Date().getFullYear();
@@ -17,9 +18,9 @@ export default function Footer() {
           <div className="footer-links-section">
             <div className="footer-link-group">
               <h4>Explore</h4>
-              <a href="#movies">Movies</a>
-              <a href="#series">Series</a>
-              <a href="#trending">Trending</a>
+              <Link to="/movies">Movies</Link>
+              <Link to="/series">Series</Link>
+              <Link to="/home">Trending</Link>
             </div>
             <div className="footer-link-group">
               <h4>Community</h4>
@@ -29,9 +30,9 @@ export default function Footer() {
             </div>
             <div className="footer-link-group">
               <h4>Account</h4>
-              <a href="#profile">Profile</a>
+              <Link to="/profile">Profile</Link>
               <a href="#settings">Settings</a>
-              <a href="#watchlist">Watchlist</a>
+              <Link to="/watchlist">Watchlist</Link>
             </div>
             <div className="footer-link-group">
               <h4>Legal</h4>

@@ -1,4 +1,5 @@
 import React, { useRef } from 'react';
+import { Link } from 'react-router-dom';
 import MovieCard from '../MovieCard/MovieCard';
 import './MovieSection.css';
 
@@ -26,7 +27,7 @@ export default function MovieSection({ title, movies, loading, error, showSeeAll
         </div>
         {movies && movies.length > 0 && (
           <div className="section-actions">
-            {showSeeAll && <a href="#see-all" className="see-all-link">See all</a>}
+            {showSeeAll && <Link to="/movies" className="see-all-link">See all</Link>}
             <div className="scroll-controls">
               <button className="scroll-btn prev" onClick={scrollLeft} aria-label="Scroll left">‹</button>
               <button className="scroll-btn next" onClick={scrollRight} aria-label="Scroll right">›</button>

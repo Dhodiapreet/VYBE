@@ -1,183 +1,147 @@
-import React, { useState, useEffect } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { useNotifications } from '../../contexts/NotificationContext';
+import React, { useEffect, useMemo, useState } from 'react';
+import { Link } from 'react-router-dom';
 import Header from '../../components/Header/Header';
 import Footer from '../../components/Footer/Footer';
+import { apiRequest } from '../../services/api';
 import './People.css';
 
-// Mock Data
-const MOCK_PEOPLE = [
-  { id: '1', displayName: 'Alex Chen', username: 'alexc', avatar: 'https://i.pravatar.cc/150?u=1', bio: 'Sci-fi nerd and aspiring filmmaker.', tastes: ['Sci-Fi', 'Action'], followers: 120, following: 80, isFollowing: false, category: 'Movie Lovers' },
-  { id: '2', displayName: 'Jamie Doe', username: 'jamiedoe', avatar: 'https://i.pravatar.cc/150?u=2', bio: 'I watch too many horror movies. Always looking for recommendations!', tastes: ['Horror', 'Thriller'], followers: 340, following: 300, isFollowing: true, category: 'Most Active' },
-  { id: '3', displayName: 'Sam Smith', username: 'sam_s', avatar: 'https://i.pravatar.cc/150?u=3', bio: 'Classic cinema enthusiast.', tastes: ['Drama', 'Romance'], followers: 85, following: 110, isFollowing: false, category: 'Movie Lovers' },
-  { id: '4', displayName: 'Taylor Swift', username: 'tswift_fan', avatar: 'https://i.pravatar.cc/150?u=4', bio: 'Musicals and rom-coms are my vibe.', tastes: ['Musical', 'Comedy'], followers: 1500, following: 400, isFollowing: false, category: 'Most Active' },
-  { id: '5', displayName: 'Chris Lee', username: 'chris_lee99', avatar: 'https://i.pravatar.cc/150?u=5', bio: 'Action packed weekends only.', tastes: ['Action', 'Adventure'], followers: 210, following: 180, isFollowing: true, category: 'Movie Lovers' },
-  { id: '6', displayName: 'Morgan Wright', username: 'morganw', avatar: 'https://i.pravatar.cc/150?u=6', bio: 'Documentaries and real-life stories.', tastes: ['Documentary', 'Biography'], followers: 95, following: 105, isFollowing: false, category: 'Movie Lovers' },
-  { id: '7', displayName: 'Jordan Sparks', username: 'jsparks', avatar: 'https://i.pravatar.cc/150?u=7', bio: 'Reviewing every movie I watch on VYBE.', tastes: ['Sci-Fi', 'Fantasy'], followers: 890, following: 560, isFollowing: false, category: 'Most Active' },
-  { id: '8', displayName: 'Casey Jones', username: 'caseyj', avatar: 'https://i.pravatar.cc/150?u=8', bio: 'Anime and animated features!', tastes: ['Animation', 'Fantasy'], followers: 420, following: 310, isFollowing: true, category: 'Most Active' },
+const TABS = [
+  { key: 'All', label: 'All', icon: '✦' },
+  { key: 'Hero', label: 'Hero', icon: '♂' },
+  { key: 'Heroine', label: 'Heroine', icon: '♀' },
+  { key: 'Director', label: 'Directors', icon: '🎬' },
+  { key: 'Musician', label: 'Musicians', icon: '♫' },
+  { key: 'Other', label: 'Other', icon: '◆' },
 ];
 
 export default function People() {
-  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeTab, setActiveTab] = useState('All');
   const [people, setPeople] = useState([]);
   const [loading, setLoading] = useState(true);
-  const { addNotification } = useNotifications();
+  const [error, setError] = useState('');
 
-  // Initialize data
   useEffect(() => {
-    // Simulate network request
-    const timer = setTimeout(() => {
-      setPeople(MOCK_PEOPLE);
-      setLoading(false);
-    }, 600);
-    return () => clearTimeout(timer);
-  }, []);
-
-  const handleFollowToggle = (userId) => {
-    const personToFollow = people.find(p => p.id === userId);
-    if (personToFollow && !personToFollow.isFollowing) {
-      addNotification({
-        type: 'follow',
-        actor: { name: personToFollow.displayName, avatar: personToFollow.avatar },
-        action: 'started following you',
-        target: null
-      });
-    }
-    setPeople(prev => prev.map(person => {
-      if (person.id === userId) {
-        return {
-          ...person,
-          isFollowing: !person.isFollowing,
-          followers: person.isFollowing ? person.followers - 1 : person.followers + 1
-        };
+    let cancelled = false;
+    const timer = setTimeout(async () => {
+      const query = searchQuery.trim();
+      setLoading(true);
+      setError('');
+      try {
+        const endpoint = query.length >= 2
+          ? '/people/tmdb/search?query=' + encodeURIComponent(query)
+          : '/people/tmdb/discover?category=' + encodeURIComponent(activeTab);
+        const response = await apiRequest(endpoint);
+        let results = response?.data?.results || [];
+        if (query.length >= 2 && activeTab !== 'All') {
+          results = results.filter(person => person.category === activeTab);
+        }
+        if (!cancelled) setPeople(results);
+      } catch (requestError) {
+        console.error('Failed to load people:', requestError);
+        if (!cancelled) {
+          setPeople([]);
+          setError('Could not load real people right now.');
+        }
+      } finally {
+        if (!cancelled) setLoading(false);
       }
-      return person;
-    }));
-  };
+    }, searchQuery.trim().length >= 2 ? 350 : 50);
 
+    return () => {
+      cancelled = true;
+      clearTimeout(timer);
+    };
+  }, [searchQuery, activeTab]);
 
-  const tabs = ['All', 'Movie Lovers', 'Most Active'];
-
-  const filteredPeople = people.filter(person => {
-    const matchesSearch = person.displayName.toLowerCase().includes(searchQuery.toLowerCase()) || 
-                          person.username.toLowerCase().includes(searchQuery.toLowerCase());
-    const matchesTab = activeTab === 'All' || person.category === activeTab;
-    return matchesSearch && matchesTab;
-  });
+  const visiblePeople = useMemo(() => people.slice(0, 24), [people]);
 
   return (
-    <div className="people-page">
+    <div className="people-page real-people-directory">
       <Header />
-      
       <main className="people-main">
-        <section className="people-intro">
-          <h1>Discover the Community</h1>
-          <p>Find friends, reviewers, and people with similar movie tastes on VYBE.</p>
-          
+        <section className="people-intro people-intro-real">
+          <span className="people-eyebrow">VYBE PEOPLE</span>
+          <h1>Discover Real People</h1>
+          <p>Explore real actors, actresses, directors, musicians and other creators from TMDB.</p>
+
           <div className="people-search-container">
             <div className="people-search-wrapper">
               <svg className="people-search-icon" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" aria-hidden="true">
-                <circle cx="11" cy="11" r="8"></circle>
-                <line x1="21" y1="21" x2="16.65" y2="16.65"></line>
+                <circle cx="11" cy="11" r="8" />
+                <line x1="21" y1="21" x2="16.65" y2="16.65" />
               </svg>
-              <input 
-                type="text" 
+              <input
+                type="text"
                 className="people-search-input"
-                placeholder="Search by name or @username..."
+                placeholder="Search actor, actress, director, musician..."
                 value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                aria-label="Search people"
+                onChange={event => setSearchQuery(event.target.value)}
+                aria-label="Search real people"
               />
+              {searchQuery && <button className="people-search-clear" type="button" onClick={() => setSearchQuery('')} aria-label="Clear search">×</button>}
             </div>
           </div>
         </section>
 
-        <div className="people-tabs">
-          {tabs.map(tab => (
-            <button 
-              key={tab}
-              className={`people-tab ${activeTab === tab ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab)}
-              aria-selected={activeTab === tab}
-              role="tab"
+        <nav className="people-tabs people-tabs-real" aria-label="People categories">
+          {TABS.map(tab => (
+            <button
+              key={tab.key}
+              className={`people-tab ${activeTab === tab.key ? 'active' : ''}`}
+              onClick={() => setActiveTab(tab.key)}
+              aria-pressed={activeTab === tab.key}
             >
-              {tab}
+              <span className="people-tab-icon" aria-hidden="true">{tab.icon}</span>
+              {tab.label}
             </button>
           ))}
-        </div>
+        </nav>
 
-        <section className="people-content">
+        <section className="people-content real-people-content">
+          <div className="real-people-toolbar">
+            <div>
+              <span className="real-people-kicker">TMDB • OFFICIAL PEOPLE DATA</span>
+              <h2>{searchQuery.trim() ? `People matching “${searchQuery.trim()}”` : activeTab === 'All' ? 'Most Famous People' : TABS.find(tab => tab.key === activeTab)?.label}</h2>
+            </div>
+            <span className="real-people-count">{loading ? 'Loading…' : `${visiblePeople.length} people`}</span>
+          </div>
+
           {loading ? (
-            <div className="people-loading">Loading community members...</div>
-          ) : filteredPeople.length > 0 ? (
-            <div className="people-grid">
-              {filteredPeople.map(person => (
-                <article key={person.id} className="user-card">
-                  <Link to={`/people/${person.username}`}>
-                    <img src={person.avatar} alt={`${person.displayName}'s avatar`} className="user-avatar" />
+            <div className="real-people-state"><span className="people-spinner" /><p>Loading real people...</p></div>
+          ) : error ? (
+            <div className="people-empty"><h3>{error}</h3><p>Try again in a moment.</p></div>
+          ) : visiblePeople.length > 0 ? (
+            <div className="people-grid real-people-grid">
+              {visiblePeople.map(person => (
+                <article className="real-person-card" key={person.tmdbId}>
+                  <Link to={`/people/actor/${person.tmdbId}`} className="real-person-profile-link">
+                    <div className="real-person-image-wrap">
+                      {person.profileUrl ? <img src={person.profileUrl} alt={person.name} className="real-person-image" loading="lazy" /> : <div className="real-person-image real-person-placeholder">{person.name.charAt(0)}</div>}
+                      <span className={`real-person-category ${String(person.category || 'Other').toLowerCase()}`}>{person.category || 'Other'}</span>
+                    </div>
                   </Link>
-                  <div className="user-info">
-                    <h3>
-                      <Link to={`/people/${person.username}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                        {person.displayName}
-                      </Link>
-                    </h3>
-                    <div className="user-username">
-                      <Link to={`/people/${person.username}`} style={{ color: 'inherit', textDecoration: 'none' }}>
-                        @{person.username}
-                      </Link>
-                    </div>
-                    <p className="user-bio">{person.bio}</p>
-                    
-                    <div className="user-tastes">
-                      {person.tastes.map(taste => (
-                        <span key={taste} className="taste-tag">{taste}</span>
-                      ))}
-                    </div>
-
-                    <div className="user-stats">
-                      <div className="stat">
-                        <span className="stat-value">{person.followers}</span>
-                        <span className="stat-label">Followers</span>
+                  <div className="real-person-body">
+                    <Link to={`/people/actor/${person.tmdbId}`} className="real-person-name">{person.name}</Link>
+                    <span className="real-person-department">{person.knownForDepartment || 'Entertainment'}</span>
+                    {person.knownFor?.length > 0 && (
+                      <div className="real-person-known-for">
+                        {person.knownFor.slice(0, 3).map(item => <span key={`${item.mediaType}-${item.tmdbId}`}>{item.title}</span>)}
                       </div>
-                      <div className="stat">
-                        <span className="stat-value">{person.following}</span>
-                        <span className="stat-label">Following</span>
-                      </div>
-                    </div>
-
-                    <div style={{ display: 'flex', gap: '10px', marginTop: '10px' }}>
-                      <button 
-                        className="btn-follow"
-                        onClick={() => navigate('/messages')}
-                        style={{ background: 'transparent', border: '1px solid #45a29e', color: '#45a29e', flex: 1 }}
-                      >
-                        Message
-                      </button>
-                      <button 
-                        className={`btn-follow ${person.isFollowing ? 'following' : 'follow'}`}
-                        onClick={() => handleFollowToggle(person.id)}
-                        aria-label={person.isFollowing ? `Unfollow ${person.displayName}` : `Follow ${person.displayName}`}
-                        style={{ flex: 1 }}
-                      >
-                        {person.isFollowing ? 'Following' : 'Follow'}
-                      </button>
+                    )}
+                    <div className="real-person-footer">
+                      <span>Popularity {Number(person.popularity || 0).toFixed(0)}</span>
+                      <Link to={`/people/actor/${person.tmdbId}`}>View profile →</Link>
                     </div>
                   </div>
                 </article>
               ))}
             </div>
           ) : (
-            <div className="people-empty">
-              <h3>No people found</h3>
-              <p>Try adjusting your search or tab filters.</p>
-            </div>
+            <div className="people-empty"><h3>No real people found</h3><p>Try another name or choose a different category.</p></div>
           )}
         </section>
       </main>
-
       <Footer />
     </div>
   );

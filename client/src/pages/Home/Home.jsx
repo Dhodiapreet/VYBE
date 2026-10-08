@@ -9,20 +9,40 @@ import { apiRequest } from '../../services/api';
 import './Home.css';
 
 export default function Home() {
-  const [movies, setMovies] = useState([]);
+  const [movieSections, setMovieSections] = useState({
+    trending: [],
+    popular: [],
+    topRated: [],
+    nowPlaying: [],
+    upcoming: []
+  });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [heroTrailerUrl, setHeroTrailerUrl] = useState(null);
 
   useEffect(() => {
     const fetchMovies = async () => {
       try {
         setLoading(true);
-        const response = await apiRequest('/movies');
-        if (response && response.data) {
-          setMovies(response.data);
-        }
+        const endpoints = {
+          trending: '/movies/tmdb/trending',
+          popular: '/movies/tmdb/popular',
+          topRated: '/movies/tmdb/top-rated',
+          nowPlaying: '/movies/tmdb/now-playing',
+          upcoming: '/movies/tmdb/upcoming'
+        };
+
+        const entries = await Promise.all(
+          Object.entries(endpoints).map(async ([key, endpoint]) => {
+            const response = await apiRequest(endpoint);
+            const results = response?.data?.results || [];
+            return [key, results];
+          })
+        );
+
+        setMovieSections(Object.fromEntries(entries));
       } catch (err) {
-        console.error('Error fetching movies:', err);
+        console.error('Error fetching TMDB movies:', err);
         setError(err.message);
       } finally {
         setLoading(false);
@@ -32,93 +52,87 @@ export default function Home() {
     fetchMovies();
   }, []);
 
-  const heroMovie = movies.length > 0 ? movies[0] : null;
+  const heroMovie = movieSections.trending[0] || movieSections.popular[0] || null;
 
-  // Safe slicing helper
-  const getSlice = (start, end) => {
-    if (!movies || movies.length === 0) return [];
-    const len = movies.length;
-    if (len >= end) return movies.slice(start, end);
-    // if we have fewer movies, just return whatever we can by wrapping or just duplicating some
-    const result = [];
-    for (let i = start; i < end; i++) {
-      result.push({ ...movies[i % len], _id: movies[i % len]._id + '-' + i }); // prevent duplicate keys
-    }
-    return result;
-  };
+  useEffect(() => {
+    let cancelled = false;
+    const fetchHeroTrailer = async () => {
+      if (!heroMovie?._id) {
+        setHeroTrailerUrl(null);
+        return;
+      }
 
-  const talkOfTheTown = getSlice(0, 10);
-  const watchWithVybe = getSlice(5, 15);
-  
-  const powMain = movies.length > 10 ? movies[10] : movies[0];
-  const powSupport = getSlice(11, 15);
+      try {
+        const response = await apiRequest(`/movies/${heroMovie._id}`);
+        if (!cancelled) {
+          setHeroTrailerUrl(response?.data?.trailerUrl || null);
+        }
+      } catch (err) {
+        console.warn('Could not load hero trailer:', err.message);
+        if (!cancelled) setHeroTrailerUrl(null);
+      }
+    };
 
-  const netflix = getSlice(2, 10);
-  const jiohotstar = getSlice(4, 12);
-  const prime = getSlice(6, 14);
-  const crunchyroll = getSlice(8, 16);
+    fetchHeroTrailer();
+    return () => {
+      cancelled = true;
+    };
+  }, [heroMovie?._id]);
+
+  const topRatedMovies = movieSections.topRated;
+  const powMain = topRatedMovies[0] || movieSections.trending[0] || null;
+  const powSupport = topRatedMovies.slice(1, 5);
 
   return (
     <div className="home-page">
       <Header />
-      
+
       <main>
-        <Hero featuredMovie={heroMovie} />
-        
+        <Hero featuredMovie={heroMovie} trailerUrl={heroTrailerUrl} />
+
         <div className="content-sections">
-          <MovieSection 
-            title="TALK OF THE TOWN" 
-            movies={talkOfTheTown} 
-            loading={loading} 
-            error={error} 
+          <MovieSection
+            title="TRENDING THIS WEEK"
+            movies={movieSections.trending}
+            loading={loading}
+            error={error}
           />
-          
-          <MovieSection 
-            title="WATCH IT WITH VYBE" 
-            movies={watchWithVybe} 
-            loading={loading} 
-            error={error} 
+
+          <MovieSection
+            title="POPULAR MOVIES"
+            movies={movieSections.popular}
+            loading={loading}
+            error={error}
           />
-          
+
           {!loading && !error && powMain && (
-            <PickOfTheWeek 
+            <PickOfTheWeek
               mainMovie={powMain}
               supportingMovies={powSupport}
             />
           )}
 
-          <MovieSection 
-            sectionLabel="Streaming Now"
-            title="WORTH WATCHING — NETFLIX" 
-            movies={netflix} 
-            loading={loading} 
-            error={error} 
+          <MovieSection
+            title="TOP RATED"
+            movies={movieSections.topRated}
+            loading={loading}
+            error={error}
           />
-          
-          <MovieSection 
-            sectionLabel="Streaming Now"
-            title="DON'T MISS THESE — JIOHOTSTAR" 
-            movies={jiohotstar} 
-            loading={loading} 
-            error={error} 
+
+          <MovieSection
+            title="NOW PLAYING"
+            movies={movieSections.nowPlaying}
+            loading={loading}
+            error={error}
           />
 
           <CommunityTeaser />
-          
-          <MovieSection 
-            sectionLabel="Streaming Now"
-            title="WORTH WATCHING — PRIME VIDEO" 
-            movies={prime} 
-            loading={loading} 
-            error={error} 
-          />
-          
-          <MovieSection 
-            sectionLabel="Streaming Now"
-            title="WORTH WATCHING — CRUNCHYROLL" 
-            movies={crunchyroll} 
-            loading={loading} 
-            error={error} 
+
+          <MovieSection
+            title="UPCOMING"
+            movies={movieSections.upcoming}
+            loading={loading}
+            error={error}
           />
         </div>
       </main>

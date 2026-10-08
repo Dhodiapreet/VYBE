@@ -17,6 +17,7 @@ export default function Header() {
         <nav className="header-nav">
           <NavLink to="/home" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Home</NavLink>
           <NavLink to="/movies" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Movies</NavLink>
+          <NavLink to="/series" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Series</NavLink>
           <NavLink to="/watchlist" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Watchlist</NavLink>
           <NavLink to="/collections" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>Collections</NavLink>
           <NavLink to="/people" className={({ isActive }) => isActive ? "nav-link active" : "nav-link"}>People</NavLink>

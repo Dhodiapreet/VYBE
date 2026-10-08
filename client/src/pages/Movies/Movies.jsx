@@ -6,11 +6,6 @@ import MovieCard from '../../components/MovieCard/MovieCard';
 import './Movies.css';
 
 
-const FEATURED_MOVIE = {
-  _id: 'f1', title: 'Interstellar Odyssey', posterUrl: 'https://images.unsplash.com/photo-1462331940025-496dfbfc7564?w=1200&q=80', releaseDate: '2024-11-05', genres: ['Sci-Fi', 'Adventure'], averageRating: 4.9,
-  description: 'Embark on a cinematic journey through the cosmos where humanity seeks a new home amongst the stars. A visually stunning masterpiece that redefines space exploration and human resilience.'
-};
-
 import { apiRequest } from '../../services/api';
 
 export default function Movies() {
@@ -25,7 +20,8 @@ export default function Movies() {
   const [loadedCount, setLoadedCount] = useState(8);
   
   const genres = ['All', 'Action', 'Adventure', 'Sci-Fi', 'Drama', 'Thriller', 'Horror', 'Comedy'];
-  const years = ['All', '2024', '2023', '2022', '2021'];
+  const currentYear = new Date().getFullYear();
+  const years = ['All', ...Array.from({ length: 7 }, (_, index) => String(currentYear - index))];
   const sortOptions = ['Popularity', 'Rating (High to Low)', 'Release Date (Newest)', 'Title (A-Z)'];
 
   // Fetch movies once on mount
@@ -82,8 +78,10 @@ export default function Movies() {
     return () => clearTimeout(timer);
   }, [allMovies, searchQuery, selectedGenre, selectedYear, selectedSort, loading]);
 
+  const featuredMovie = allMovies[0] || null;
+
   const loadMore = () => {
-    setLoadedCount(prev => prev + 4);
+    setLoadedCount(prev => Math.min(prev + 4, displayedMovies.length));
   };
 
   return (
@@ -114,26 +112,34 @@ export default function Movies() {
           </div>
         </section>
 
-        {!searchQuery && selectedGenre === 'All' && selectedYear === 'All' && (
+        {!loading && !searchQuery && selectedGenre === 'All' && selectedYear === 'All' && featuredMovie && (
           <section className="featured-discovery-strip">
-            <div className="featured-backdrop" style={{ backgroundImage: `url(${FEATURED_MOVIE.posterUrl})` }}>
+            <div
+              className="featured-backdrop"
+              style={{ backgroundImage: `url(${featuredMovie.backdropUrl || featuredMovie.posterUrl})` }}
+            >
               <div className="featured-overlay">
                 <div className="featured-content">
                   <span className="featured-badge">Featured Discovery</span>
-                  <h2>{FEATURED_MOVIE.title}</h2>
+                  <h2>{featuredMovie.title}</h2>
                   <div className="featured-meta">
-                    <span className="featured-year">{FEATURED_MOVIE.releaseDate.substring(0, 4)}</span>
+                    <span className="featured-year">
+                      {featuredMovie.releaseDate ? new Date(featuredMovie.releaseDate).getFullYear() : 'N/A'}
+                    </span>
                     <span className="meta-separator">•</span>
-                    <span className="featured-genre">{FEATURED_MOVIE.genres.join(', ')}</span>
+                    <span className="featured-genre">{featuredMovie.genres?.join(', ') || 'Movie'}</span>
                     <span className="meta-separator">•</span>
-                    <span className="featured-rating">★ {FEATURED_MOVIE.averageRating.toFixed(1)}</span>
+                    <span className="featured-rating">
+                      ★ {featuredMovie.averageRating?.toFixed(1) || 'NR'}
+                    </span>
                   </div>
-                  <p className="featured-desc">{FEATURED_MOVIE.description}</p>
-                  <Link to={`/movies/${FEATURED_MOVIE._id}`} className="btn-primary" style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>
-                    <svg viewBox="0 0 24 24" fill="currentColor" width="20" height="20">
-                      <path d="M8 5v14l11-7z"/>
-                    </svg>
-                    Watch Trailer
+                  <p className="featured-desc">{featuredMovie.description}</p>
+                  <Link
+                    to={`/movies/${featuredMovie._id}`}
+                    className="btn-primary"
+                    style={{ display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}
+                  >
+                    View Details
                   </Link>
                 </div>
               </div>

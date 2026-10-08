@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import MovieCard from '../MovieCard/MovieCard';
 import './PickOfTheWeek.css';
 
@@ -21,11 +22,11 @@ export default function PickOfTheWeek({ mainMovie, supportingMovies }) {
           <div className="pow-image-wrapper">
             <img src={bgImage} alt={mainMovie.title} className="pow-image" />
             <div className="pow-overlay">
-              <button className="play-btn large" aria-label="Play">
+              <Link to={"/movies/" + mainMovie._id} className="play-btn large" aria-label="View movie details" title="View movie details">
                 <svg viewBox="0 0 24 24" fill="currentColor">
                   <path d="M8 5v14l11-7z"/>
                 </svg>
-              </button>
+              </Link>
             </div>
           </div>
           <div className="pow-info">

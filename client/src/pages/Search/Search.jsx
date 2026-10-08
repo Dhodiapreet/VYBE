@@ -5,14 +5,6 @@ import Footer from '../../components/Footer/Footer';
 import MovieCard from '../../components/MovieCard/MovieCard';
 import './Search.css';
 
-// Mock Data
-const MOCK_MOVIES = [
-  { _id: '1', title: 'The Quantum Paradox', posterUrl: 'https://images.unsplash.com/photo-1536440136628-849c177e76a1?w=500&q=80', releaseDate: '2023-11-10', genres: ['Sci-Fi', 'Thriller'], averageRating: 4.8 },
-  { _id: '2', title: 'Midnight Run', posterUrl: 'https://images.unsplash.com/photo-1574267432553-4b4628081524?w=500&q=80', releaseDate: '2024-01-15', genres: ['Action', 'Comedy'], averageRating: 4.2 },
-  { _id: '3', title: 'Echoes of Silence', posterUrl: 'https://images.unsplash.com/photo-1534447677768-be436bb09401?w=500&q=80', releaseDate: '2023-09-05', genres: ['Drama', 'Mystery'], averageRating: 4.5 },
-  { _id: '4', title: 'Neon Dreams', posterUrl: 'https://images.unsplash.com/photo-1550745165-9bc0b252726f?w=500&q=80', releaseDate: '2024-03-22', genres: ['Sci-Fi', 'Action'], averageRating: 4.0 },
-];
-
 const MOCK_PEOPLE = [
   { id: '1', displayName: 'Alex Chen', username: 'alexc', avatar: 'https://i.pravatar.cc/150?u=1', bio: 'Sci-fi nerd and aspiring filmmaker.', tastes: ['Sci-Fi', 'Action'], followers: 120, following: 80, isFollowing: false },
   { id: '2', displayName: 'Jamie Doe', username: 'jamiedoe', avatar: 'https://i.pravatar.cc/150?u=2', bio: 'I watch too many horror movies. Always looking for recommendations!', tastes: ['Horror', 'Thriller'], followers: 340, following: 300, isFollowing: true },
@@ -34,6 +26,7 @@ export default function Search() {
   
   // API State
   const [searchResults, setSearchResults] = useState({ movies: [], people: [] });
+  const [trendingMovies, setTrendingMovies] = useState([]);
   const [loading, setLoading] = useState(false);
   
   const dropdownRef = useRef(null);
@@ -45,6 +38,18 @@ export default function Search() {
     }, 300);
     return () => clearTimeout(timer);
   }, [query]);
+
+  useEffect(() => {
+    const fetchTrendingMovies = async () => {
+      try {
+        const res = await apiRequest('/movies/tmdb/trending');
+        setTrendingMovies(res?.data?.results || []);
+      } catch (err) {
+        console.error('Trending movies API error:', err);
+      }
+    };
+    fetchTrendingMovies();
+  }, []);
 
   // Fetch from API when debouncedQuery changes
   useEffect(() => {
@@ -224,8 +229,8 @@ export default function Search() {
                 {query.trim().length > 0 ? (
                   <div className="dropdown-section">
                     <div className="dropdown-header">Suggestions</div>
-                    {/* Instant suggestions based on query */}
-                    {MOCK_MOVIES.filter(m => m.title.toLowerCase().includes(query.toLowerCase())).slice(0, 3).map(m => (
+                    {/* Live TMDB suggestions */}
+                    {searchResults.movies.slice(0, 3).map(m => (
                       <button key={`s-m-${m._id}`} className="dropdown-item" onClick={() => handleSuggestionClick(m.title)}>
                         <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><polygon points="23 7 16 12 23 17 23 7"></polygon><rect x="1" y="5" width="15" height="14" rx="2" ry="2"></rect></svg>
                         {m.title}
@@ -271,7 +276,7 @@ export default function Search() {
             <div className="discovery-section-block">
               <h3>Trending Movies</h3>
               <div className="search-movies-grid">
-                {MOCK_MOVIES.map(movie => (
+                {trendingMovies.map(movie => (
                   <MovieCard key={movie._id} movie={movie} />
                 ))}
               </div>

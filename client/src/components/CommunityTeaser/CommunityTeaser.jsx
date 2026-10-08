@@ -1,7 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Link } from 'react-router-dom';
 import './CommunityTeaser.css';
 
 export default function CommunityTeaser() {
+  const [followedUsers, setFollowedUsers] = useState(new Set());
   const users = [
     { id: 1, name: 'Alex M.', avatar: 'https://via.placeholder.com/100/aa3bff/fff?text=AM', review: 'Mind-bending cinematography!' },
     { id: 2, name: 'Sarah J.', avatar: 'https://via.placeholder.com/100/4e00b3/fff?text=SJ', review: 'Best thriller of the year.' },
@@ -26,14 +28,30 @@ export default function CommunityTeaser() {
               <div className="user-info">
                 <span className="user-name">{user.name}</span>
                 <p className="user-review">"{user.review}"</p>
-                <button className="btn-follow">Follow</button>
+                <button
+                  className="btn-follow"
+                  type="button"
+                  onClick={() => {
+                    setFollowedUsers((prev) => {
+                      const next = new Set(prev);
+                      if (next.has(user.id)) {
+                        next.delete(user.id);
+                      } else {
+                        next.add(user.id);
+                      }
+                      return next;
+                    });
+                  }}
+                >
+                  {followedUsers.has(user.id) ? 'Following' : 'Follow'}
+                </button>
               </div>
             </div>
           ))}
         </div>
         
         <div className="community-actions">
-          <button className="btn-primary">Find People</button>
+          <Link to="/people" className="btn-primary">Find People</Link>
         </div>
       </div>
     </section>
